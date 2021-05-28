@@ -60,8 +60,9 @@ AppAsset::register($this);
     <div class="row">
         <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
             <div class="sidebar-sticky pt-3">
+                <?php if(Yii::$app->user->can("viewAdminCategories")): ?>
                 <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-                    <span>Категории</span>
+                    <span>Для администратора</span>
                     <a class="d-flex align-items-center text-muted" href="#" aria-label="Add a new report">
                         <span data-feather="plus-circle"></span>
                     </a>
@@ -80,6 +81,42 @@ AppAsset::register($this);
                         </a>
                     </li>
                 </ul>
+                <hr class="my-2">
+                <?php endif; ?>
+                <?php if(Yii::$app->user->can("viewTeacherCategories")): ?>
+                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                        <span>Преподавателю</span>
+                        <a class="d-flex align-items-center text-muted" href="#" aria-label="Add a new report">
+                            <span data-feather="plus-circle"></span>
+                        </a>
+                    </h6>
+                    <ul class="nav flex-column mt-2">
+                        <li class="nav-item">
+                            <a class="nav-link" href="control-panel">
+                                <i class="bi bi-bootstrap"></i>
+                                Bootstrap
+                            </a>
+                        </li>
+                    </ul>
+                    <hr class="my-2">
+                <?php endif ?>
+                <?php if(Yii::$app->user->can("viewStudentCategories")): ?>
+                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                        <span>Студенту</span>
+                        <a class="d-flex align-items-center text-muted" href="#" aria-label="Add a new report">
+                            <span data-feather="plus-circle"></span>
+                        </a>
+                    </h6>
+                    <ul class="nav flex-column mt-2">
+                        <li class="nav-item">
+                            <a class="nav-link" href="control-panel">
+                                <i class="bi bi-code-slash"></i>
+                                Hello world
+                            </a>
+                        </li>
+                    </ul>
+                    <hr class="my-2">
+                <?php endif ?>
             </div>
         </nav>
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">

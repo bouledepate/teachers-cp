@@ -40,8 +40,8 @@ class RbacController extends Controller
         $viewTeacherCategories = $auth->createPermission("viewTeacherCategories");
         $viewTeacherCategories->description = "Просмотр категорий преподавателей";
 
-        $viewStudentsCategories = $auth->createPermission("viewStudentsCategories");
-        $viewStudentsCategories->description = "Просмотр категорий студентов";
+        $viewStudentCategories = $auth->createPermission("viewStudentCategories");
+        $viewStudentCategories->description = "Просмотр категорий студентов";
 
         // Добавление прав в БД.
         $auth->add($viewAdminCategories);
@@ -49,16 +49,17 @@ class RbacController extends Controller
         $auth->add($editUser);
         $auth->add($viewUser);
         $auth->add($viewTeacherCategories);
-        $auth->add($viewStudentsCategories);
+        $auth->add($viewStudentCategories);
 
         // Иерархия "студент -> преподаватель -> админ".
-        $auth->addChild($student, $viewStudentsCategories);
+        $auth->addChild($student, $viewStudentCategories);
         $auth->addChild($student, $viewUser);
         $auth->addChild($teacher, $student);
         $auth->addChild($teacher, $viewTeacherCategories);
         $auth->addChild($admin, $teacher);
         $auth->addChild($admin, $addUser);
         $auth->addChild($admin, $editUser);
+        $auth->addChild($admin, $viewAdminCategories);
 
         // Назначаем роли юзерам. (убрать после тестов)
         $auth->assign($admin, 1);

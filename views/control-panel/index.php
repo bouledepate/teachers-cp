@@ -16,18 +16,22 @@ $this->title = 'Панель управления';
 <div class="content">
     <h5 id="total-users"></h5>
     <hr class="my-2">
-    <h5>Ваша роль:
-        <?php
-        $user_id = Yii::$app->user->getId();
-        if(Yii::$app->authManager->getAssignment('admin', $user_id)){
-            echo 'администратор.';
-        } elseif(Yii::$app->authManager->getAssignment('teacher', $user_id)) {
-            echo 'преподаватель.';
-        } else {
-            echo 'студент.';
-        }
-        ?>
-    </h5>
+    <div class="row">
+        <div class="col-4">
+            <h5 class="alert alert-success">Ваша роль:
+                <?php
+                $user_id = Yii::$app->user->getId();
+                if(Yii::$app->authManager->getAssignment('admin', $user_id)){
+                    echo 'администратор.';
+                } elseif(Yii::$app->authManager->getAssignment('teacher', $user_id)) {
+                    echo 'преподаватель.';
+                } else {
+                    echo 'студент.';
+                }
+                ?>
+            </h5>
+        </div>
+    </div>
 </div>
 <script>
     function declination(count) {
