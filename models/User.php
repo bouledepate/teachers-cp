@@ -25,6 +25,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     const STATUS_ACTIVE = 1;
     const STATUS_BLOCKED = 0;
 
+
     public static function tableName()
     {
         return 'user';
@@ -79,7 +80,23 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
         $user->setPassword($model->password);
         $user->generateAuthKey();
         $user->save();
+        $user->setRole($model->role);
         return $user->save() ? $user : null;
+    }
+
+    public static function updateUser($id, $params)
+    {
+        $user = User::findOne($id);
+        $user->username = $params->username;
+        $user->setPassword($params->password);
+        $user->email = $params->email;
+        $user->save();
+        $user->setRole($params->role);
+    }
+
+    public function getProfile()
+    {
+        return $this->hasOne(Profile::class, ['user_id' => 'id']);
     }
 
     public function getId()
@@ -102,16 +119,25 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
         return $this->auth_key === $authKey;
     }
 
-    public function getPasswordHash(){
-        return $this->password;
-    }
-
     public function validatePassword($password)
     {
-        $hash = $this->getPasswordHash();
-        if(Yii::$app->getSecurity()->validatePassword($password, $hash)){
-            return true;
-        } else return false;
+        return Yii::$app->security->validatePassword($password, $this->password);
+    }
+
+    public function setRole($role_id)
+    {
+        $auth = Yii::$app->authManager;
+        if($role_id !== ''){
+            if($role_id === '1'){
+                $role = 'admin';
+            } elseif($role_id === '2'){
+                $role = 'teacher';
+            } else {
+                $role = 'student';
+            }
+            $auth->revokeAll($this->id);
+            $auth->assign($auth->getRole($role), $this->id);
+        }
     }
 
     public function getRole()

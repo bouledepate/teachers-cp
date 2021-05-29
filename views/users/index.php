@@ -12,10 +12,8 @@ $this->title = "Пользователи";
     <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group mr-2">
             <a href="/control-panel/users/create" class="btn btn-sm btn-outline-success"><i
-                        class="bi bi-person-plus-fill"></i> Создать</a>
-            <button type="button" class="btn btn-sm btn-outline-primary"><i class="bi bi-person-plus-fill"></i> Создать
-                несколько
-            </button>
+                        class="bi bi-person-plus-fill"></i> Создать
+            </a>
         </div>
     </div>
 </div>

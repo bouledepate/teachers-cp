@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @var $model app\forms\SignupForm;
+ */
+
 use yii\helpers\Html;
 use yii\bootstrap4\ActiveForm;
 
@@ -15,20 +19,32 @@ $this->title = 'Создание пользователя';
                 'layout' => 'default',
                 'fieldConfig' => ['template' => "{beginWrapper}\n{input}\n{hint}\n{error}\n{endWrapper}"]
             ]) ?>
-            <div class="form-group">
-                <?= $form->field($model, 'username')->textInput([
-                    'placeholder' => 'Логин', 'class' => 'form-control'
-                ]) ?>
+            <div class="form-row">
+                <div class="col">
+                    <?= $form->field($model, 'username')->textInput([
+                        'placeholder' => 'Логин', 'class' => 'form-control'
+                    ]) ?>
+                </div>
+                <div class="col">
+                    <?= $form->field($model, 'email')->textInput([
+                        'placeholder' => 'Электронная почта', 'class' => 'form-control'
+                    ]) ?>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col">
+                    <?= $form->field($model, 'password')->passwordInput([
+                        'placeholder' => 'Пароль', 'class' => 'form-control'
+                    ]) ?>
+                </div>
+                <div class="col">
+                    <?= $form->field($model, 'password_repeat')->passwordInput([
+                        'placeholder' => 'Повторите пароль', 'class' => 'form-control'
+                    ]) ?>
+                </div>
             </div>
             <div class="form-group">
-                <?= $form->field($model, 'email')->textInput([
-                    'placeholder' => 'Электронная почта', 'class' => 'form-control'
-                ]) ?>
-            </div>
-            <div class="form-group">
-                <?= $form->field($model, 'password')->textInput([
-                    'placeholder' => 'Пароль', 'class' => 'form-control'
-                ]) ?>
+                <?= $form->field($model, 'role')->dropdownList($model->items, $model->params) ?>
             </div>
             <?= Html::submitButton("Создать", [
                 'class' => 'btn btn-primary'

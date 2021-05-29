@@ -11,7 +11,18 @@ class SignupForm extends Model
 {
     public $username;
     public $password;
+    public $password_repeat;
+    public $role;
     public $email;
+
+    public $items = [
+        1 => 'Администратор',
+        2 => 'Преподаватель',
+        3 => 'Студент'
+    ];
+    public $params = [
+        'prompt' => 'Выберите роль...',
+    ];
 
     public function rules()
     {
@@ -27,7 +38,10 @@ class SignupForm extends Model
             ['email', 'string', 'max' => 255],
             ['email', 'unique', 'targetClass' => 'app\models\User', 'message' => 'Данный почтовый адрес уже используется'],
 
-            ['password', 'required'],
+            [['password', 'password_repeat'], 'required'],
+            ['password', 'compare', 'compareAttribute' => 'password_repeat'],
+
+            ['role', 'required']
         ];
     }
 
@@ -37,6 +51,7 @@ class SignupForm extends Model
             'username' => 'Имя пользователя',
             'password' => 'Пароль',
             'password_repeat' => 'Повторение пароля',
+            'role' => 'Роль пользователя',
             'email' => 'Электронная почта'
         ];
     }

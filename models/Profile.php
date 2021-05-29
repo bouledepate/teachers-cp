@@ -47,6 +47,23 @@ class Profile extends ActiveRecord
         ];
     }
 
+    public static function create($user_id)
+    {
+        $profile = new Profile();
+        $profile->user_id = $user_id;
+        $profile->first_name = 'Не установлено';
+        $profile->last_name = 'Не установлено';
+        $profile->save();
+    }
+
+    public static function updateProfile($id, $params)
+    {
+        $profile = Profile::findOne($id);
+        $profile->first_name = $params->firstName;
+        $profile->last_name = $params->lastName;
+        $profile->save();
+    }
+
     public function getId()
     {
         return $this->id;
@@ -54,7 +71,7 @@ class Profile extends ActiveRecord
 
     public function getUser()
     {
-        return User::findOne(['id' => $this->user_id]);
+        return $this->hasOne(User::class, ['id' => 'user_id']);
     }
 
     public function getFirstName()

@@ -62,7 +62,7 @@ AppAsset::register($this);
             <div class="sidebar-sticky pt-3">
                 <ul class="nav flex-column mt-2">
                     <li class="nav-item">
-                        <a class="nav-link" href="/control-panel">
+                        <a class="nav-link" href="/profile">
                             <i class="bi bi-house-door"></i>
                             Ваш профиль
                         </a>

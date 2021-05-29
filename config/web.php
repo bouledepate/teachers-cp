@@ -49,11 +49,11 @@ $config = [
             'showScriptName' => false,
             'rules' => [
                 '' => 'site/index',
-                'control-panel' => 'control-panel/index',
+                '<controller:(control-panel|profile)' => '<controller>/index',
                 '<controller:(auth)>/<action:(login|logout)>' => '<controller>/<action>',
                 'control-panel/<controller:(users)>/' => '<controller>/index',
                 'control-panel/<controller:(users)>/<action:(create)>/' => '<controller>/<action>',
-                'control-panel/<controller:(users)>/<action:(view|update|block)>/<id:\d+>/' => '<controller>/<action>',
+                'control-panel/<controller:(users)>/<action:(view|update|block|change-password)>/<id:\d+>/' => '<controller>/<action>',
             ],
         ],
         'authManager' => [
