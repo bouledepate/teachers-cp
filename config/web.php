@@ -5,6 +5,7 @@ $db = require __DIR__ . '/db.php';
 
 $config = [
     'id' => 'basic',
+    'language' => 'ru',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'aliases' => [
@@ -20,7 +21,7 @@ $config = [
             'class' => 'yii\caching\FileCache',
         ],
         'user' => [
-            'identityClass' => 'app\models\UserIdentity',
+            'identityClass' => 'app\models\User',
             'enableAutoLogin' => true,
         ],
         'errorHandler' => [
@@ -48,9 +49,11 @@ $config = [
             'showScriptName' => false,
             'rules' => [
                 '' => 'site/index',
-                'login' => 'auth/login',
-                'logout' => 'auth/logout',
-                'control-panel' => 'control-panel/index'
+                'control-panel' => 'control-panel/index',
+                '<controller:(auth)>/<action:(login|logout)>' => '<controller>/<action>',
+                'control-panel/<controller:(users)>/' => '<controller>/index',
+                'control-panel/<controller:(users)>/<action:(create)>/' => '<controller>/<action>',
+                'control-panel/<controller:(users)>/<action:(view|update|block)>/<id:\d+>/' => '<controller>/<action>',
             ],
         ],
         'authManager' => [

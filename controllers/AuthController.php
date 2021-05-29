@@ -6,7 +6,7 @@ use Yii;
 use yii\base\BaseObject;
 use yii\filters\AccessControl;
 use yii\web\Controller;
-use app\models\LoginForm;
+use app\forms\LoginForm;
 
 class AuthController extends Controller
 {

@@ -1,9 +1,11 @@
 <?php
 
-namespace app\models;
+namespace app\forms;
 
+use app\models\User;
 use Yii;
 use yii\base\Model;
+use yii\web\ForbiddenHttpException;
 
 /**
  * LoginForm is the model behind the login form.
@@ -60,7 +62,12 @@ class LoginForm extends Model
     public function login()
     {
         if ($this->validate()) {
-            return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600*24*30 : 0);
+            $user = $this->getUser();
+            if($user->status === 1){
+                return Yii::$app->user->login($user, $this->rememberMe ? 3600*24*30 : 0);
+            } else {
+                throw new ForbiddenHttpException('Пользователь "'. $user->username .'" заблокирован в системе.');
+            }
         }
         return false;
     }
@@ -73,7 +80,7 @@ class LoginForm extends Model
     public function getUser()
     {
         if ($this->_user === false) {
-            $this->_user = UserIdentity::findByUsername($this->username);
+            $this->_user = User::findByUsername($this->username);
         }
 
         return $this->_user;

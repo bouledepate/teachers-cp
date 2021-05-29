@@ -2,11 +2,14 @@
 
 namespace app\controllers;
 
+use app\models\User;
 use Yii;
+use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
+use yii\web\ForbiddenHttpException;
 
 class SiteController extends Controller
 {
@@ -17,6 +20,16 @@ class SiteController extends Controller
                 'class' => AccessControl::className(),
                 'only' => ['logout'],
                 'rules' => [
+                    [
+                        'allow' => true,
+                        'actions' => [],
+                        'matchCallback' => function($rule, $action){
+                            return \Yii::$app->user->identity->status === 1;
+                        },
+                        'denyCallback' => function($rule, $action){
+                            throw new ForbiddenHttpException("Пользователь ". Yii::$app->user->identity->username ." заблокирован на данном сайте.");
+                        }
+                    ],
                     [
                         'actions' => ['logout'],
                         'allow' => true,

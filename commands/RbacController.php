@@ -6,6 +6,7 @@ namespace app\commands;
 
 use Yii;
 use yii\console\Controller;
+use app\models\User;
 
 class RbacController extends Controller
 {
@@ -24,7 +25,6 @@ class RbacController extends Controller
 
 
         // Создание прав доступа.
-
         $viewAdminCategories = $auth->createPermission("viewAdminCategories");
         $viewAdminCategories->description = "Просмотр категорий администратора";
 
@@ -61,9 +61,16 @@ class RbacController extends Controller
         $auth->addChild($admin, $editUser);
         $auth->addChild($admin, $viewAdminCategories);
 
-        // Назначаем роли юзерам. (убрать после тестов)
-        $auth->assign($admin, 1);
-        $auth->assign($teacher, 2);
-        $auth->assign($student, 3);
+        // Создаём пользователя "admin-admin".
+        $user = new User();
+        $user->username = 'admin';
+        $user->email = 'admin@example.com';
+        $user->setPassword('admin');
+        $user->generateAuthKey();
+        $user->status = User::STATUS_ACTIVE;
+        $user->save();
+
+        // Назначаем роли юзеру. (убрать после тестов)
+        $auth->assign($admin, $user->getId());
     }
 }

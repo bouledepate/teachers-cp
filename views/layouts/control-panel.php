@@ -44,14 +44,14 @@ AppAsset::register($this);
 <body>
 <?php $this->beginBody() ?>
 <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-    <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="#">SCP</a>
+    <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="#">Univer</a>
     <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-toggle="collapse" data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
     <span class="text-secondary">Вы авторизованы, как <strong><?= Yii::$app->user->identity->username ?></strong></span>
     <ul class="navbar-nav px-3">
         <li class="nav-item text-nowrap">
-            <a class="nav-link" href="logout">Выйти из системы</a>
+            <a class="nav-link" href="/auth/logout">Выйти из системы</a>
         </li>
     </ul>
 </nav>
@@ -60,6 +60,15 @@ AppAsset::register($this);
     <div class="row">
         <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
             <div class="sidebar-sticky pt-3">
+                <ul class="nav flex-column mt-2">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/control-panel">
+                            <i class="bi bi-house-door"></i>
+                            Ваш профиль
+                        </a>
+                    </li>
+                </ul>
+                <hr class="my-2">
                 <?php if(Yii::$app->user->can("viewAdminCategories")): ?>
                 <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
                     <span>Для администратора</span>
@@ -69,15 +78,9 @@ AppAsset::register($this);
                 </h6>
                 <ul class="nav flex-column mt-2">
                     <li class="nav-item">
-                        <a class="nav-link" href="control-panel">
-                            <i class="bi bi-house-door"></i>
-                            Главная
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="/control-panel/users">
                             <i class="bi bi-people"></i>
-                            Студенты
+                            Пользователи
                         </a>
                     </li>
                 </ul>
