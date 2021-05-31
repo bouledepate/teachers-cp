@@ -1,6 +1,7 @@
 <?php
 
 /* @var $user yii\models\User */
+
 /* @var $profile yii\models\Profile */
 
 use yii\helpers\Html;
@@ -14,8 +15,8 @@ $this->title = $user->username;
     <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group mr-2">
             <a href="/control-panel/users/block/<?= $user->id ?>" class="btn btn-sm btn-outline-danger">
-                <?= $user->status ? '<i class="bi bi-shield-fill-x"></i> Заблокировать':
-                '<i class="bi bi-shield-slash-fill"></i> Разблокировать' ?>
+                <?= $user->status ? '<i class="bi bi-shield-fill-x"></i> Заблокировать' :
+                    '<i class="bi bi-shield-slash-fill"></i> Разблокировать' ?>
             </a>
             <a href="/control-panel/users/update/<?= $user->id ?>" class="btn btn-sm btn-outline-success">
                 <i class="bi bi-pencil-square"></i> Изменить
@@ -53,8 +54,8 @@ $this->title = $user->username;
             'label' => 'Пароль',
             'attribute' => 'password',
             'visible' => (bool)Yii::$app->authManager->getAssignment('admin', \Yii::$app->user->getId()),
-            'value' => function($data){
-                $url = Url::to(['users/change-password', 'id'=>$data->id]);
+            'value' => function ($data) {
+                $url = Url::to(['users/change-password', 'id' => $data->id]);
                 return $data->password . Html::a(' (изменить)', $url);
             },
             'format' => 'raw'
@@ -76,7 +77,7 @@ $this->title = $user->username;
 <?= DetailView::widget([
     'model' => $profile,
     'options' => [
-            'class' => 'table table-bordered table-striped'
+        'class' => 'table table-bordered table-striped'
     ],
     'attributes' => [
         [
@@ -92,6 +93,17 @@ $this->title = $user->username;
         [
             'label' => 'Фамилия',
             'attribute' => 'last_name'
+        ],
+        [
+            'label' => 'Группа',
+            'attribute' => 'user.group.name'
+        ],
+        [
+            'label' => 'Профиль',
+            'value' => function ($data) {
+                return Html::a('Ссылка', ['profile/index', 'username' => $data->user->username]);
+            },
+            'format' => 'raw'
         ],
     ]
 ])

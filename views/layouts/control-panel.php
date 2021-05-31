@@ -79,8 +79,14 @@ AppAsset::register($this);
                 <ul class="nav flex-column mt-2">
                     <li class="nav-item">
                         <a class="nav-link" href="/control-panel/users">
-                            <i class="bi bi-people"></i>
+                            <i class="bi bi-person"></i>
                             Пользователи
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/control-panel/groups">
+                            <i class="bi bi-people"></i>
+                            Группы
                         </a>
                     </li>
                 </ul>

@@ -50,10 +50,11 @@ $config = [
             'rules' => [
                 '' => 'site/index',
                 '<controller:(control-panel|profile)' => '<controller>/index',
+                'profile/<username>/' => 'profile/index',
                 '<controller:(auth)>/<action:(login|logout)>' => '<controller>/<action>',
-                'control-panel/<controller:(users)>/' => '<controller>/index',
-                'control-panel/<controller:(users)>/<action:(create)>/' => '<controller>/<action>',
-                'control-panel/<controller:(users)>/<action:(view|update|block|change-password)>/<id:\d+>/' => '<controller>/<action>',
+                'control-panel/<controller:(users|groups)>/' => '<controller>/index',
+                'control-panel/<controller:(users|groups)>/<action:(create)>/' => '<controller>/<action>',
+                'control-panel/<controller:(users|groups)>/<action:(view|update|block|change-password)>/<id:\d+>/' => '<controller>/<action>',
             ],
         ],
         'authManager' => [

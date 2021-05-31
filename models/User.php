@@ -14,6 +14,7 @@ use yii\web\HttpException;
  * @property string $password
  * @property string $email
  * @property int $status
+ * @property int $group_id
  * @property string|null $access_token
  * @property-read string $passwordHash
  * @property-read null|string $authKey
@@ -52,7 +53,8 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
             'email' => 'Email',
             'access_token' => 'Токен',
             'auth_key' => 'Ключ авторизации',
-            'status' => 'Статус аккаунта'
+            'status' => 'Статус аккаунта',
+            'group_id' => 'Группа'
         ];
     }
 
@@ -97,6 +99,21 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     public function getProfile()
     {
         return $this->hasOne(Profile::class, ['user_id' => 'id']);
+    }
+
+    public function getGroup()
+    {
+        return $this->hasOne(Group::class, ['id' => 'group_id']);
+    }
+
+    public function setGroup($id)
+    {
+        if($id === 0){
+            $this->group_id = null;
+        } else {
+            $this->group_id = $id;
+        }
+        $this->save();
     }
 
     public function getId()
