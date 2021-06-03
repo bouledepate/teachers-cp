@@ -11,6 +11,8 @@ use yii\widgets\ActiveForm;
  */
 
 $this->title = 'Редактирование пользователя ' . $user->username ?>
+
+
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2"><?= Html::encode($this->title) ?></h1>
 </div>
@@ -34,7 +36,7 @@ $this->title = 'Редактирование пользователя ' . $user-
     <hr class="my-2">
     <h4>Настройка профиля</h4>
     <div class="form-row">
-        <div class="col"><?= $form->field($profile, 'first_name')->label('Имя') ?></div>
+        <div class="col"><?= $form->field($profile, 'first_name')->label('Имя')->textInput(['placeholder' => 'Не установлено']) ?></div>
         <div class="col"><?= $form->field($profile, 'last_name')->label('Фамилия') ?></div>
     </div>
     <?= Html::submitButton('Обновить', ['class' => 'btn btn-primary']) ?>

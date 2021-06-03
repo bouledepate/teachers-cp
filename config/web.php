@@ -10,7 +10,7 @@ $config = [
     'bootstrap' => ['log'],
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
-        '@npm'   => '@vendor/npm-asset',
+        '@npm' => '@vendor/npm-asset',
     ],
     'components' => [
         'request' => [
@@ -50,11 +50,13 @@ $config = [
             'rules' => [
                 '' => 'site/index',
                 '<controller:(control-panel|profile)' => '<controller>/index',
-                'profile/<username>/' => 'profile/index',
+                'profile/<username>' => 'profile/index',
                 '<controller:(auth)>/<action:(login|logout)>' => '<controller>/<action>',
-                'control-panel/<controller:(users|groups)>/' => '<controller>/index',
-                'control-panel/<controller:(users|groups)>/<action:(create)>/' => '<controller>/<action>',
-                'control-panel/<controller:(users|groups)>/<action:(view|update|block|change-password)>/<id:\d+>/' => '<controller>/<action>',
+                'control-panel/<controller:(users|groups|disciplines)>' => '<controller>/index',
+                'control-panel/<controller:(disciplines)>/<action:(remove-teacher)>/<id:\d+>/<userId>' => '<controller>/<action>',
+                'control-panel/<controller:(users|groups|disciplines)>/<action:(create)>' => '<controller>/<action>',
+                'control-panel/<controller:(users|groups|disciplines)>/<action:(view|update|block|change-password)>/<id:\d+>' => '<controller>/<action>',
+
             ],
         ],
         'authManager' => [

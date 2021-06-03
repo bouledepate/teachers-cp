@@ -15,6 +15,7 @@ use app\forms\ChangePasswordForm;
 
 use app\models\User;
 use app\models\Profile;
+use app\models\search\UserSearch;
 
 
 class UsersController extends Controller
@@ -24,11 +25,11 @@ class UsersController extends Controller
     public function actionIndex()
     {
         if (Yii::$app->authManager->getAssignment('admin', Yii::$app->user->getId())) {
-            $dataProvider = new ActiveDataProvider(
-                ['query' => User::find()]
-            );
+            $searchModel = new UserSearch();
+            $dataProvider = $searchModel->search(\Yii::$app->request->get());
             return $this->render('index', [
                 'dataProvider' => $dataProvider,
+                'searchModel' => $searchModel
             ]);
         } else {
             throw new ForbiddenHttpException("У вас нет доступа к данной странице.");

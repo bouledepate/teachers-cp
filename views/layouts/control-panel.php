@@ -89,6 +89,12 @@ AppAsset::register($this);
                             Группы
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/control-panel/disciplines">
+                            <i class="bi bi-book"></i>
+                            Дисциплины
+                        </a>
+                    </li>
                 </ul>
                 <hr class="my-2">
                 <?php endif; ?>

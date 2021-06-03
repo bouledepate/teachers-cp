@@ -61,12 +61,10 @@ $this->title = 'Группа ' . $group->name;
                     'attribute' => 'username'
                 ],
                 [
-                    'label' => 'Фамилия',
-                    'attribute' => 'profile.last_name'
-                ],
-                [
-                    'label' => 'Имя',
-                    'attribute' => 'profile.first_name'
+                    'label' => 'ФИО студента',
+                    'value' => function($data){
+                        return $data->profile->getFullName();
+                    }
                 ],
                 [
                     'label' => 'Аккаунт',

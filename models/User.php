@@ -37,7 +37,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
         return [
             [['username', 'password', 'email'], 'required'],
             [['id', 'status'], 'integer'],
-            [['username', 'password' ], 'string', 'max' => 255],
+            [['username', 'password'], 'string', 'max' => 255],
             [['access_token', 'auth_key'], 'string', 'max' => 255],
             [['email'], 'string', 'max' => 255],
             [['id'], 'unique'],
@@ -106,9 +106,15 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
         return $this->hasOne(Group::class, ['id' => 'group_id']);
     }
 
+    public function getDisciplines()
+    {
+        return $this->hasMany(Discipline::class, ['id' => 'discipline_id'])
+            ->viaTable('user_discipline', ['user_id' => 'id']);
+    }
+
     public function setGroup($id)
     {
-        if($id === 0){
+        if (!$id) {
             $this->group_id = null;
         } else {
             $this->group_id = $id;
@@ -144,10 +150,10 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     public function setRole($role_id)
     {
         $auth = Yii::$app->authManager;
-        if($role_id !== ''){
-            if($role_id === '1'){
+        if ($role_id !== '') {
+            if ($role_id === '1') {
                 $role = 'admin';
-            } elseif($role_id === '2'){
+            } elseif ($role_id === '2') {
                 $role = 'teacher';
             } else {
                 $role = 'student';
@@ -160,12 +166,12 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     public function getRole()
     {
         $auth = Yii::$app->authManager;
-        if($auth->getAssignment('admin', $this->id)){
-            return 'Администратор';
-        } elseif($auth->getAssignment('teacher', $this->id)) {
-            return 'Преподаватель';
+        if ($auth->getAssignment('admin', $this->id)) {
+            return 'admin';
+        } elseif ($auth->getAssignment('teacher', $this->id)) {
+            return 'teacher';
         } else {
-            return 'Студент';
+            return 'student';
         }
     }
 
@@ -181,12 +187,12 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 
     public function generateAccessToken()
     {
-        $this->access_token = Yii::$app->security->generateRandomString(15).'-token';
+        $this->access_token = Yii::$app->security->generateRandomString(15) . '-token';
     }
 
     public function changeStatus()
     {
-        if($this->status === User::STATUS_ACTIVE){
+        if ($this->status === User::STATUS_ACTIVE) {
             $this->status = User::STATUS_BLOCKED;
         } else {
             $this->status = User::STATUS_ACTIVE;

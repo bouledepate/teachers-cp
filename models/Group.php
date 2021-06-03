@@ -11,7 +11,6 @@ use yii\db\ActiveRecord;
  * @property string $name
  * @property-read string $role
  */
-
 class Group extends ActiveRecord
 {
     public $user = null;
@@ -44,7 +43,7 @@ class Group extends ActiveRecord
 
     public static function updateGroup($id, $params)
     {
-        $group = Group::findOne(['id'=>$id]);
+        $group = Group::findOne(['id' => $id]);
         $group->name = $params->name;
         $group->save();
     }
