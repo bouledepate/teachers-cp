@@ -14,11 +14,11 @@ $this->title = $user->username;
     <h1 class="h2">Информация о пользователе <?= $user->username ?></h1>
     <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group mr-2">
-            <a href="/control-panel/users/block/<?= $user->id ?>" class="btn btn-sm btn-outline-danger">
-                <?= $user->status ? '<i class="bi bi-shield-fill-x"></i> Заблокировать' :
-                    '<i class="bi bi-shield-slash-fill"></i> Разблокировать' ?>
+            <a href="<?= Url::to(['users/block', 'id' => $user->id]) ?>" class="btn btn-sm btn-outline-danger">
+                <?= $user->status ? '<i class="fas fa-ban"></i> Заблокировать' :
+                    '<i class="far fa-check-circle"></i> Разблокировать' ?>
             </a>
-            <a href="/control-panel/users/update/<?= $user->id ?>" class="btn btn-sm btn-outline-success">
+            <a href="<?= Url::to(['users/update', 'id'=>$user->id]) ?>" class="btn btn-sm btn-outline-success">
                 <i class="bi bi-pencil-square"></i> Изменить
             </a>
         </div>

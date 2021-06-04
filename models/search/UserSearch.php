@@ -26,6 +26,11 @@ class UserSearch extends User
         $query = User::find();
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => [
+                'forcePageParam' => false,
+                'pageSizeParam' => false,
+                'pageSize' => 10
+            ]
         ]);
 
         // загружаем данные формы поиска и производим валидацию

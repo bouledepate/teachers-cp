@@ -2,6 +2,7 @@
 
 use yii\grid\GridView;
 use yii\helpers\Html;
+use yii\helpers\Url;
 
 /**
  * @var \yii\data\ActiveDataProvider $dataProvider
@@ -12,7 +13,7 @@ $this->title = "Дисциплины";
     <h1 class="h2"><?= Html::encode($this->title) ?></h1>
     <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group mr-2">
-            <a href="/control-panel/disciplines/create" class="btn btn-sm btn-outline-success"><i
+            <a href="<?= Url::to(['disciplines/create']) ?>" class="btn btn-sm btn-outline-success"><i
                         class="bi bi-person-plus-fill"></i> Создать
             </a>
         </div>

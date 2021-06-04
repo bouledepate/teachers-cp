@@ -2,9 +2,10 @@
 
 use yii\grid\GridView;
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\DetailView;
 
-/* @var $user yii\models\User */
+/* @var $user app\models\User */
 
 $this->title = 'Профиль ' . $user->username;
 ?>
@@ -13,7 +14,7 @@ $this->title = 'Профиль ' . $user->username;
     <?php if (Yii::$app->user->can("editUser")): ?>
         <div class="btn-toolbar mb-2 mb-md-0">
             <div class="btn-group mr-2">
-                <a href="/control-panel/users/update/<?= $user->id ?>" class="btn btn-sm btn-outline-secondary">
+                <a href="<?= Url::to(['users/update', 'id'=>$user->id]) ?>" class="btn btn-sm btn-outline-secondary">
                     <i class="bi bi-pencil-square"></i> Изменить
                 </a>
             </div>
@@ -51,6 +52,18 @@ $this->title = 'Профиль ' . $user->username;
                 'attribute' => 'user.group.name',
                 'visible' => (bool)Yii::$app->authManager->getAssignment('student', $user->id)
             ],
+            [
+                    'label' => 'Дисциплины',
+                'value' => function($data) use ($user)
+                {
+                    $disciplines = [];
+                    foreach($user->disciplines as $discipline){
+                        $disciplines[] = $discipline->name;
+                    }
+                    return implode(', ', $disciplines);
+                },
+                'visible' => (bool)Yii::$app->authManager->getAssignment('teacher', $user->id)
+            ]
         ],
     ])
     ?>

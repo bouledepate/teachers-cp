@@ -51,8 +51,6 @@ class Profile extends ActiveRecord
     {
         $profile = new Profile();
         $profile->user_id = $user_id;
-        $profile->first_name = 'Не установлено';
-        $profile->last_name = 'Не установлено';
         $profile->save();
     }
 

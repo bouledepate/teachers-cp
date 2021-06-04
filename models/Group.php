@@ -48,6 +48,12 @@ class Group extends ActiveRecord
         $group->save();
     }
 
+    public function getDisciplines()
+    {
+        return $this->hasMany(Discipline::class, ['id' => 'discipline_id'])
+            ->viaTable('group_discipline', ['group_id' => 'id']);
+    }
+
     public function getId()
     {
         return $this->id;
@@ -61,5 +67,43 @@ class Group extends ActiveRecord
     public function getUsers()
     {
         return $this->hasMany(User::class, ['group_id' => 'id']);
+    }
+
+    public static function addStudents($array, $groupId)
+    {
+        foreach($array as $key=>$value){
+            $user = User::findOne(['id' => $value]);
+            $user->setGroup($groupId);
+        }
+    }
+
+    public static function removeStudent($id)
+    {
+        $user = User::findOne(['id' => $id]);
+        $user->setGroup(null);
+    }
+
+    public function addDisciplines($array)
+    {
+        foreach($array as $key=>$value){
+            $discipline = Discipline::findOne(['id' => $value]);
+            $this->link('disciplines', $discipline);
+
+            // Добавляем студентам группы дисциплину ID.
+            foreach($this->users as $user){
+                $user->link('disciplines', $discipline);
+            }
+        }
+    }
+
+    public function removeDiscipline($id)
+    {
+        $discipline = Discipline::findOne(['id' => $id]);
+        $this->unlink('disciplines', $discipline);
+
+        // Убираем дисциплину у студентов.
+        foreach($this->users as $user){
+            $user->unlink('disciplines', $discipline);
+        }
     }
 }

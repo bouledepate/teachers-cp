@@ -4,28 +4,16 @@
 namespace app\forms;
 
 use yii\base\Model;
-use app\models\User;
 
 
 class AddStudentForm extends Model
 {
-    public $groupId;
-    public $username;
+    public $studentId;
 
     public function rules()
     {
         return [
-            [['username', 'groupId'], 'required', 'message' => 'Поля должны быть заполнены'],
-            ['username', 'string', 'max' => 255],
-            ['username', 'validateRole']
+            [['studentId'], 'required', 'message' => 'Вы должны выбрать как минимум 1-го студента'],
         ];
-    }
-
-    public function validateRole($attribute, $params)
-    {
-        $user = User::findByUsername($this->$attribute);
-        if(!\Yii::$app->authManager->getAssignment('student', $user->id)){
-            $this->addError($attribute, 'Пользователь должен быть определён как студент');
-        }
     }
 }

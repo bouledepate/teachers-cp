@@ -14,7 +14,7 @@ $this->title = "Пользователи";
     <h1 class="h2"><?= Html::encode($this->title) ?></h1>
     <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group mr-2">
-            <a href="/control-panel/users/create" class="btn btn-sm btn-outline-success"><i
+            <a href="<?= Url::to(['users/create']) ?>" class="btn btn-sm btn-outline-success"><i
                         class="bi bi-person-plus-fill"></i> Создать
             </a>
         </div>
@@ -26,6 +26,13 @@ $this->title = "Пользователи";
         'filterModel' => $searchModel,
         'tableOptions' => [
             'class' => 'table table-striped table-bordered table-sm'
+        ],
+        'pager' => [
+            'firstPageLabel' => '<<',
+            'lastPageLabel' => '>>',
+            'nextPageLabel' => '<',
+            'prevPageLabel' => '>',
+            'maxButtonCount' => 5,
         ],
         'columns' => [
             [
@@ -57,9 +64,9 @@ $this->title = "Пользователи";
                 'buttons' => [
                     'block' => function ($url, $model, $key) {
                         if($model->status === 1) {
-                            return Html::a('<i class="bi bi-shield-fill-x"></i>', $url);
+                            return Html::a('<i class="fas fa-ban"></i>', $url);
                         } else {
-                            return Html::a('<i class="bi bi-shield-slash-fill"></i>', $url);
+                            return Html::a('<i class="far fa-check-circle"></i>', $url);
                         }
                     }
                 ],

@@ -49,14 +49,15 @@ $config = [
             'showScriptName' => false,
             'rules' => [
                 '' => 'site/index',
-                '<controller:(control-panel|profile)' => '<controller>/index',
                 'profile/<username>' => 'profile/index',
                 '<controller:(auth)>/<action:(login|logout)>' => '<controller>/<action>',
-                'control-panel/<controller:(users|groups|disciplines)>' => '<controller>/index',
-                'control-panel/<controller:(disciplines)>/<action:(remove-teacher)>/<id:\d+>/<userId>' => '<controller>/<action>',
-                'control-panel/<controller:(users|groups|disciplines)>/<action:(create)>' => '<controller>/<action>',
-                'control-panel/<controller:(users|groups|disciplines)>/<action:(view|update|block|change-password)>/<id:\d+>' => '<controller>/<action>',
-
+                'admin/<controller:(users|groups|disciplines)>' => '<controller>/index',
+                'admin/<controller:(users|groups|disciplines)>/<action:(create|view|update)>/<id:\d+>' => '<controller>/<action>',
+                'admin/<controller:(users)>/<action:(block|change-password)>' => '<controller>/<action>',
+                'admin/<controller:(groups)>/<action:(add-student|remove-student)>' => '<controller>/<action>',
+                'admin/<controller:(disciplines)>/<action:(add-teacher|remove-teacher)>' => '<controller>/<action>',
+                'teacher/<controller:(estimates)>' => '<controller>/index',
+                'teacher/<controller:(estimates)/<action:(create|view|update)>/<id:\d+>' => '<controller>/<action>',
             ],
         ],
         'authManager' => [

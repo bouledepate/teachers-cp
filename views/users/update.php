@@ -37,7 +37,7 @@ $this->title = 'Редактирование пользователя ' . $user-
     <h4>Настройка профиля</h4>
     <div class="form-row">
         <div class="col"><?= $form->field($profile, 'first_name')->label('Имя')->textInput(['placeholder' => 'Не установлено']) ?></div>
-        <div class="col"><?= $form->field($profile, 'last_name')->label('Фамилия') ?></div>
+        <div class="col"><?= $form->field($profile, 'last_name')->label('Фамилия')->textInput(['placeholder' => 'Не установлено']) ?></div>
     </div>
     <?= Html::submitButton('Обновить', ['class' => 'btn btn-primary']) ?>
     <?php ActiveForm::end() ?>

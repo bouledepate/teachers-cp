@@ -4,6 +4,8 @@ namespace app\models;
 
 use Yii;
 use yii\db\Exception;
+use yii\db\Query;
+use yii\helpers\ArrayHelper;
 use yii\web\HttpException;
 
 /**
@@ -106,20 +108,16 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
         return $this->hasOne(Group::class, ['id' => 'group_id']);
     }
 
+    public function setGroup($id)
+    {
+        $this->group_id = $id;
+        $this->save();
+    }
+
     public function getDisciplines()
     {
         return $this->hasMany(Discipline::class, ['id' => 'discipline_id'])
             ->viaTable('user_discipline', ['user_id' => 'id']);
-    }
-
-    public function setGroup($id)
-    {
-        if (!$id) {
-            $this->group_id = null;
-        } else {
-            $this->group_id = $id;
-        }
-        $this->save();
     }
 
     public function getId()
@@ -198,5 +196,69 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
             $this->status = User::STATUS_ACTIVE;
         }
         $this->save();
+    }
+
+    // Queries;
+    public static function getStudentsByGroup($groupId)
+    {
+        return User::find()
+            ->select(['user.id', "CONCAT(profile.first_name, ' ', profile.last_name) AS full_name"])
+            ->joinWith('profile')
+            ->join('LEFT JOIN', 'auth_assignment', 'auth_assignment.user_id=user.id')
+            ->where(['auth_assignment.item_name' => 'student'])
+            ->andWhere(['is', 'user.group_id', null ])
+            ->andWhere(['not in', 'user.id', (new Query())
+                ->select('user.id')
+                ->from('user')
+                ->leftJoin('group', 'group.id = user.group_id')
+                ->where(['group.id' => $groupId])])
+            ->asArray()
+            ->all();
+    }
+
+    public static function getTeachersByDiscipline($disciplineId)
+    {
+        return User::find()
+            ->select(['user.id', "CONCAT(profile.first_name, ' ', profile.last_name) AS full_name"])
+            ->joinWith('profile')
+            ->join('LEFT JOIN', 'auth_assignment', 'auth_assignment.user_id=user.id')
+            ->where(['!=', 'auth_assignment.item_name', 'student'])
+            ->andWhere(['not in', 'user.id', (new Query())
+                ->select('user.id')
+                ->from('user')
+                ->leftJoin('user_discipline', 'user_discipline.user_id=user.id')
+                ->leftJoin('discipline', 'user_discipline.discipline_id=discipline.id')
+                ->where(['discipline.id' => $disciplineId])])
+            ->asArray()
+            ->all();
+    }
+
+    public static function getTeachers()
+    {
+        $data = User::find()->select(['user.id', "CONCAT(profile.first_name, ' ', profile.last_name) AS full_name"])
+            ->joinWith('profile')
+            ->join('LEFT JOIN', 'auth_assignment', 'auth_assignment.user_id = user.id')
+            ->where(['!=', 'auth_assignment.item_name', 'student'])
+            ->asArray()
+            ->all();
+        return ArrayHelper::map($data, 'id', 'full_name');
+    }
+
+    public static function getTeachersToDisplay($id)
+    {
+        return User::find()
+            ->joinWith('disciplines')
+            ->join('LEFT JOIN', 'auth_assignment', 'auth_assignment.user_id = user.id')
+            ->where(['!=', 'auth_assignment.item_name', 'student'])
+            ->andWhere(['discipline.id' => $id]);
+    }
+
+    public static function getGroupStudentsToDisplay($id)
+    {
+        return User::find()
+            ->joinWith('group')
+            ->join('LEFT JOIN', 'auth_assignment', 'auth_assignment.user_id = user.id')
+            ->where(['=', 'auth_assignment.item_name', 'student'])
+            ->andWhere(['user.group_id' => $id]);
     }
 }

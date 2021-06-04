@@ -11,8 +11,6 @@ use yii\web\NotFoundHttpException;
 
 class ProfileController extends Controller
 {
-    public $layout = 'control-panel';
-
     public function actionIndex($username=null)
     {
         $user = User::findOne(['username' => $username ? $username : Yii::$app->user->identity->username]);

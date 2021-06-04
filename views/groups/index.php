@@ -1,5 +1,6 @@
 <?php
 
+use app\widgets\Alert;
 use yii\grid\GridView;
 use yii\helpers\Html;
 use yii\helpers\Url;
@@ -11,12 +12,13 @@ $this->title = "Группы";
     <h1 class="h2"><?= Html::encode($this->title) ?></h1>
     <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group mr-2">
-            <a href="/control-panel/groups/create" class="btn btn-sm btn-outline-success"><i
+            <a href="<?= Url::to(['groups/create']) ?>" class="btn btn-sm btn-outline-success"><i
                     class="bi bi-person-plus-fill"></i> Создать
             </a>
         </div>
     </div>
 </div>
+
 <div>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,

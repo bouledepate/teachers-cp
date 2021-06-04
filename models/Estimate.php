@@ -35,11 +35,6 @@ class Estimate extends ActiveRecord
         ];
     }
 
-    public function getStudent()
-    {
-        return $this->hasOne(User::class, ['id' => 'user_id'])->viaTable('user_discipline', ['id' => 'user_discipline_id']);
-    }
-
     public function getAuthor()
     {
         return $this->hasOne(User::class, ['author_id' => 'id']);

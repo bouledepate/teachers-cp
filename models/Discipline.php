@@ -4,6 +4,7 @@
 namespace app\models;
 
 use yii\db\ActiveRecord;
+use yii\db\Query;
 
 /**
  * @property int $id
@@ -11,8 +12,6 @@ use yii\db\ActiveRecord;
  */
 class Discipline extends ActiveRecord
 {
-    public $_selection;
-
     public static function tableName()
     {
         return 'discipline';
@@ -52,6 +51,12 @@ class Discipline extends ActiveRecord
             ->viaTable('user_discipline', ['discipline_id' => 'id']);
     }
 
+    public function getGroups()
+    {
+        return $this->hasMany(Group::class, ['id' => 'group_id'])
+            ->viaTable('group_discipline', ['discipline_id' => 'id']);
+    }
+
     public function getId()
     {
         return $this->id;
@@ -70,17 +75,22 @@ class Discipline extends ActiveRecord
         }
     }
 
-    public function removeTeachers($array)
-    {
-        foreach ($array as $key => $value) {
-            $user = User::findOne(['id' => $value]);
-            $this->unlink('users', $user);
-        }
-    }
-
     public function removeTeacher($id)
     {
         $user = User::findOne(['id' => $id]);
         $this->unlink('users', $user);
+    }
+
+    // Queries
+    public static function getDisciplinesByGroup($id)
+    {
+        return Discipline::find()
+            ->where(['not in', 'discipline.id', (new Query())
+                ->select('discipline.id')
+                ->from('discipline')
+                ->leftJoin('group_discipline', 'group_discipline.discipline_id=discipline.id')
+                ->where(['group_discipline.group_id' => $id])])
+            ->asArray()
+            ->all();
     }
 }

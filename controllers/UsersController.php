@@ -16,42 +16,40 @@ use app\forms\ChangePasswordForm;
 use app\models\User;
 use app\models\Profile;
 use app\models\search\UserSearch;
+use yii\web\NotFoundHttpException;
 
 
 class UsersController extends Controller
 {
-    public $layout = 'control-panel';
-
     public function actionIndex()
     {
-        if (Yii::$app->authManager->getAssignment('admin', Yii::$app->user->getId())) {
-            $searchModel = new UserSearch();
-            $dataProvider = $searchModel->search(\Yii::$app->request->get());
-            return $this->render('index', [
-                'dataProvider' => $dataProvider,
-                'searchModel' => $searchModel
-            ]);
-        } else {
-            throw new ForbiddenHttpException("У вас нет доступа к данной странице.");
-        }
+        $searchModel = new UserSearch();
+        $dataProvider = $searchModel->search(\Yii::$app->request->get());
+
+        return $this->render('index', [
+            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel
+        ]);
     }
 
-    public function actionView($id){
-        if(Yii::$app->user->can('viewUser')){
-            $user = User::findOne(['id' => $id]);
-            $profile = $user->profile;
-            return $this->render('view', [
-                'user' => $user,
-                'profile' => $profile
-            ]);
-        } else {
-            throw new ForbiddenHttpException("У вас нет доступа к данной странице");
+    public function actionView($id)
+    {
+        $user = User::findOne(['id' => $id]);
+
+        if(!$user){
+            throw new NotFoundHttpException('Пользователь не найден');
         }
+
+        return $this->render('view', [
+            'user' => $user,
+            'profile' => $user->profile
+        ]);
+
     }
 
-    public function actionCreate(){
+    public function actionCreate()
+    {
         $model = new SignupForm();
-        $auth = Yii::$app->authManager;
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $user = User::create($model);
@@ -64,15 +62,23 @@ class UsersController extends Controller
         ]);
     }
 
-    public function actionBlock($id){
+    public function actionBlock($id)
+    {
         $user = User::findOne(['id' => $id]);
-        if(\Yii::$app->user->getId()!=$user->id){
+
+        if(!$user){
+            throw new NotFoundHttpException('Пользователь не найден');
+        }
+
+        if (\Yii::$app->user->getId() != $user->id) {
             $user->changeStatus();
         }
+
         return $this->redirect(Yii::$app->request->referrer);
     }
 
-    public function actionUpdate($id){
+    public function actionUpdate($id)
+    {
         $user = User::findOne($id);
         $profile = Profile::findOne($id);
         $items = [
@@ -85,17 +91,17 @@ class UsersController extends Controller
         ];
 
         if (!isset($user, $profile)) {
-            throw new NotFoundHttpException("Пользователь не найден");
+            throw new NotFoundHttpException('Пользователь не найден ');
         }
 
         if ($user->load(Yii::$app->request->post()) && $profile->load(Yii::$app->request->post())) {
             $isValid = $user->validate();
             $isValid = $profile->validate() && $isValid;
+
             if ($isValid) {
                 $user->setRole(Yii::$app->request->post()['User']['role']);
                 $user->save(false);
                 $profile->save(false);
-
                 return $this->redirect(['/users/view', 'id' => $id]);
             }
         }
@@ -111,12 +117,18 @@ class UsersController extends Controller
     public function actionChangePassword($id)
     {
         $model = new ChangePasswordForm();
-        if($model->load(\Yii::$app->request->post()) && $model->validate()){
-            $user = User::findOne($id);
+        $user = User::findOne($id);
+
+        if(!$user){
+            throw new NotFoundHttpException('Пользователь не найден');
+        }
+
+        if ($model->load(\Yii::$app->request->post()) && $model->validate()) {
             $user->setPassword($model->password);
             $user->save();
             return $this->redirect(['/users/view', 'id' => $id]);
         }
+
         return $this->render('change-password', [
             'model' => $model
         ]);

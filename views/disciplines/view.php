@@ -4,17 +4,12 @@
  * @var $discipline app\models\Discipline
  */
 
-use app\models\User;
 use kartik\select2\Select2;
 use yii\grid\GridView;
 use yii\helpers\Html;
 use yii\helpers\Url;
-use yii\web\JsExpression;
 use yii\widgets\DetailView;
-use yii\bootstrap4\Modal;
 use yii\bootstrap4\ActiveForm;
-use yii\jui\AutoComplete;
-use yii\widgets\Pjax;
 
 $this->title = $discipline->name;
 ?>
@@ -22,7 +17,7 @@ $this->title = $discipline->name;
     <h1 class="h2">Дисциплина: <?= $discipline->name ?></h1>
     <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group mr-2">
-            <a href="/control-panel/disciplines/update/<?= $discipline->id ?>" class="btn btn-sm btn-outline-success">
+            <a href="<?= Url::to(['disciplines/update', 'id' => $discipline->id]) ?>" class="btn btn-sm btn-outline-success">
                 <i class="bi bi-pencil-square"></i> Изменить
             </a>
         </div>
