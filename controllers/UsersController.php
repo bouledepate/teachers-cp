@@ -7,6 +7,7 @@ use Yii;
 use yii\base\BaseObject;
 use yii\data\ActiveDataProvider;
 
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\ForbiddenHttpException;
 
@@ -21,6 +22,23 @@ use yii\web\NotFoundHttpException;
 
 class UsersController extends Controller
 {
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::class,
+                'only' => [],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'actions' => [],
+                        'roles' => ['viewAdminCategories']
+                    ],
+                ]
+            ]
+        ];
+    }
+
     public function actionIndex()
     {
         $searchModel = new UserSearch();

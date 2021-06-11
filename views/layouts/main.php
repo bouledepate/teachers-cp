@@ -142,9 +142,9 @@ AppAsset::register($this);
                     </h6>
                     <ul class="nav flex-column mt-2">
                         <li class="nav-item">
-                            <a class="nav-link" href="control-panel">
-                                <i class="bi bi-code-slash"></i>
-                                Hello world
+                            <a class="nav-link" href="<?= Url::to(['diary/index']) ?>">
+                                <i class="fas fa-book"></i>
+                                Успеваемость
                             </a>
                         </li>
                     </ul>

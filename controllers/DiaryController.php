@@ -3,14 +3,14 @@
 
 namespace app\controllers;
 
-use app\models\Profile;
+use app\models\Discipline;
 use app\models\User;
-use Yii;
+use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\web\Controller;
-use yii\web\NotFoundHttpException;
 
-class ProfileController extends Controller
+
+class DiaryController extends Controller
 {
     public function behaviors()
     {
@@ -22,21 +22,21 @@ class ProfileController extends Controller
                     [
                         'allow' => true,
                         'actions' => [],
-                        'roles' => ['@']
-                    ],
+                        'roles' => ['viewStudentCategories']
+                    ]
                 ]
             ]
         ];
     }
 
-    public function actionIndex($username=null)
+    public function actionIndex()
     {
-        $user = User::findOne(['username' => $username ? $username : Yii::$app->user->identity->username]);
-        if($user === null){
-            throw new NotFoundHttpException('Пользователя '. $username .' не существует');
-        }
+        $dataProvider = new ActiveDataProvider([
+            'query' => Discipline::find()->joinWith('users')->where(['user.id' => \Yii::$app->user->getId()])
+        ]);
+
         return $this->render('index', [
-            'user' => $user
+            'dataProvider' => $dataProvider
         ]);
     }
 }

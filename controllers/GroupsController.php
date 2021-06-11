@@ -7,6 +7,7 @@ use app\forms\AddDisciplineForm;
 use app\models\Discipline;
 use app\models\User;
 use Yii;
+use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use app\models\Group;
@@ -17,6 +18,23 @@ use yii\web\NotFoundHttpException;
 
 class GroupsController extends Controller
 {
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::class,
+                'only' => [],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'actions' => [],
+                        'roles' => ['viewAdminCategories']
+                    ],
+                ]
+            ]
+        ];
+    }
+
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([

@@ -71,7 +71,7 @@ class Group extends ActiveRecord
 
     public static function addStudents($array, $groupId)
     {
-        foreach($array as $key=>$value){
+        foreach ($array as $key => $value) {
             $user = User::findOne(['id' => $value]);
             $user->setGroup($groupId);
         }
@@ -85,12 +85,12 @@ class Group extends ActiveRecord
 
     public function addDisciplines($array)
     {
-        foreach($array as $key=>$value){
+        foreach ($array as $key => $value) {
             $discipline = Discipline::findOne(['id' => $value]);
             $this->link('disciplines', $discipline);
 
             // Добавляем студентам группы дисциплину ID.
-            foreach($this->users as $user){
+            foreach ($this->users as $user) {
                 $user->link('disciplines', $discipline);
             }
         }
@@ -102,8 +102,16 @@ class Group extends ActiveRecord
         $this->unlink('disciplines', $discipline);
 
         // Убираем дисциплину у студентов.
-        foreach($this->users as $user){
+        foreach ($this->users as $user) {
             $user->unlink('disciplines', $discipline);
         }
+    }
+
+    public function hasDiscipline($dId)
+    {
+        return Group::find()->joinWith('disciplines')->where([
+            'group_discipline.group_id' => $this->id,
+            'group_discipline.discipline_id' => $dId
+        ])->one();
     }
 }

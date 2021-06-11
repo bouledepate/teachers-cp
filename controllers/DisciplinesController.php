@@ -5,16 +5,35 @@ namespace app\controllers;
 
 use yii\data\ActiveDataProvider;
 use yii\db\Query;
+use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use app\models\Discipline;
 use app\models\User;
 use app\forms\CreateDisciplineForm;
+use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 
 
 class DisciplinesController extends Controller
 {
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::class,
+                'only' => [],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'actions' => [],
+                        'roles' => ['viewAdminCategories']
+                    ],
+                ]
+            ]
+        ];
+    }
+
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([

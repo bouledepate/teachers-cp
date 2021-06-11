@@ -11,11 +11,14 @@ $this->title = 'Профиль ' . $user->username;
 ?>
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2"><?= $user->username ?></h1>
-    <?php if (Yii::$app->user->can("editUser")): ?>
+    <?php if (Yii::$app->user->can("viewAdminCategories")): ?>
         <div class="btn-toolbar mb-2 mb-md-0">
             <div class="btn-group mr-2">
+                <a href="<?= Url::to(['users/view', 'id'=>$user->id]) ?>" class="btn btn-sm btn-outline-secondary">
+                    <i class="fas fa-eye"></i> Посмотреть
+                </a>
                 <a href="<?= Url::to(['users/update', 'id'=>$user->id]) ?>" class="btn btn-sm btn-outline-secondary">
-                    <i class="bi bi-pencil-square"></i> Изменить
+                    <i class="far fa-edit"></i> Изменить
                 </a>
             </div>
         </div>

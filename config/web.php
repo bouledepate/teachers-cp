@@ -57,7 +57,8 @@ $config = [
                 'admin/<controller:(groups)>/<action:(add-student|remove-student)>' => '<controller>/<action>',
                 'admin/<controller:(disciplines)>/<action:(add-teacher|remove-teacher)>' => '<controller>/<action>',
                 'teacher/<controller:(estimates)>' => '<controller>/index',
-                'teacher/<controller:(estimates)/<action:(create|view|update)>/<id:\d+>' => '<controller>/<action>',
+                'teacher/<controller:(estimates)>/<action:(view)>/<id:\d+>' => '<controller>/<action>',
+                'student/<controller:(diary)>' => '<controller>/index'
             ],
         ],
         'authManager' => [

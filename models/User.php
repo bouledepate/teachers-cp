@@ -198,7 +198,27 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
         $this->save();
     }
 
+    public function isTeacher($dId)
+    {
+        return User::find()->joinWith('disciplines')->where([
+            'user_discipline.user_id' => $this->id,
+            'user_discipline.discipline_id' => $dId
+        ])->one();
+    }
+
     // Queries;
+    public static function getUserDisciplineRelationId($uId, $dId)
+    {
+        return User::find()
+            ->select('user_discipline.id')
+            ->joinWith('disciplines')
+            ->where([
+                'user_discipline.user_id' => $uId,
+                'user_discipline.discipline_id' => $dId
+            ])
+            ->one();
+    }
+
     public static function getStudentsByGroup($groupId)
     {
         return User::find()
@@ -206,7 +226,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
             ->joinWith('profile')
             ->join('LEFT JOIN', 'auth_assignment', 'auth_assignment.user_id=user.id')
             ->where(['auth_assignment.item_name' => 'student'])
-            ->andWhere(['is', 'user.group_id', null ])
+            ->andWhere(['is', 'user.group_id', null])
             ->andWhere(['not in', 'user.id', (new Query())
                 ->select('user.id')
                 ->from('user')
@@ -214,6 +234,20 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
                 ->where(['group.id' => $groupId])])
             ->asArray()
             ->all();
+    }
+
+    public static function getStudents($groupId, $isQuery = false)
+    {
+        $data = User::find()->select(['user.id', "CONCAT(profile.first_name, ' ', profile.last_name) AS full_name"])
+            ->joinWith('profile')
+            ->join('LEFT JOIN', 'auth_assignment', 'auth_assignment.user_id = user.id')
+            ->where(['=', 'auth_assignment.item_name', 'student'])
+            ->andWhere(['=', 'user.group_id', $groupId]);
+        if (!$isQuery) {
+            return ArrayHelper::map($data->asArray()->all(), 'id', 'full_name');
+        } else {
+            return $data;
+        }
     }
 
     public static function getTeachersByDiscipline($disciplineId)
@@ -252,13 +286,5 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
             ->where(['!=', 'auth_assignment.item_name', 'student'])
             ->andWhere(['discipline.id' => $id]);
     }
-
-    public static function getGroupStudentsToDisplay($id)
-    {
-        return User::find()
-            ->joinWith('group')
-            ->join('LEFT JOIN', 'auth_assignment', 'auth_assignment.user_id = user.id')
-            ->where(['=', 'auth_assignment.item_name', 'student'])
-            ->andWhere(['user.group_id' => $id]);
-    }
 }
+
