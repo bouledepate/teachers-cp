@@ -7,11 +7,20 @@
 use yii\bootstrap4\ActiveForm;
 use yii\helpers\Html;
 use app\helpers\ScheduleHelper;
+use yii\helpers\Url;
 
 $this->title = 'Перенести занятие';
 ?>
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class="h2"><?= Html::encode($this->title) ?></h1>
+    <h1 class="h2"><?= Html::encode($this->title) ?> "<?= $schedule->discipline->name ?>"</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <div class="btn-group mr-2">
+            <a href="<?= Url::to(['schedule/edit', 'id' => $schedule->group_id, 'week' => $schedule->week]) ?>"
+               class="btn btn-sm btn-outline-secondary">
+                <i class="fas fa-undo-alt"></i> Вернуться
+            </a>
+        </div>
+    </div>
 </div>
 <?= \app\widgets\Alert::widget() ?>
 <?php $form = ActiveForm::begin([

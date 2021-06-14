@@ -4,6 +4,7 @@
 namespace app\helpers;
 
 use app\models\Schedule;
+use app\models\User;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\widgets\Pjax;
@@ -81,7 +82,21 @@ class ScheduleHelper
                 return $dataObject->discipline->name;
             }
         }
-        return "—";
+    }
+
+    public static function displayDisciplineTeacher($data, $day, $time){
+        foreach($data as $dataObject){
+            if($dataObject->day === $day && $dataObject->time === $time){
+                $items = [];
+                foreach ($dataObject->discipline->users as $user) {
+                    if($user->role === 'teacher'){
+                        $fullName = $user->profile->getFullName();
+                        $items[] = Html::a($fullName, ['profile/index', 'username'=>$user->username]);
+                    }
+                }
+                return $items ? implode(', ', $items) : null;
+            }
+        }
     }
 
 }

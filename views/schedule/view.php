@@ -20,7 +20,8 @@ $this->title = "Расписание группы " . $group->name;
                class="btn btn-sm btn-outline-secondary">
                 <i class="fas fa-arrow-circle-right"></i> <?= ScheduleHelper::weekName($weekId ? 0 : 1) ?>
             </a>
-            <a href="<?= Url::to(['schedule/edit', 'id' => $group->id, 'week' => $weekId]) ?>" class="btn btn-sm btn-outline-secondary">
+            <a href="<?= Url::to(['schedule/edit', 'id' => $group->id, 'week' => $weekId]) ?>"
+               class="btn btn-sm btn-outline-secondary">
                 <i class="fas fa-tasks"></i> <?= $data ? "Изменить" : "Заполнить" ?>
             </a>
         </div>
@@ -28,20 +29,34 @@ $this->title = "Расписание группы " . $group->name;
 </div>
 <div class="row row-cols-3">
     <?php foreach (ScheduleHelper::dayList() as $dayId => $dayName): ?>
-    <div class="col p-1">
-        <div class="card" style="width: 18rem;">
-            <div class="card-body bg-light">
-                <h5 class="card-title"><?= ScheduleHelper::dayName($dayId) ?> <?= ScheduleHelper::checkDisciplinesByDay($data, $dayId) ?></h5>
+        <div class="col p-1">
+            <div class="card">
+                <div class="card-body bg-light">
+                    <h5 class="card-title"><?= ScheduleHelper::dayName($dayId) ?> <?= ScheduleHelper::checkDisciplinesByDay($data, $dayId) ?></h5>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <?php foreach (ScheduleHelper::timeList() as $timeId => $timeName): ?>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div class="row">
+                                <div class="col-4">
+                                    <span class="badge badge-secondary mr-3"><?= ScheduleHelper::timeName($timeId) ?></span>
+                                </div>
+                                <div class="col">
+                                    <div class="row">
+                                        <div class="col">
+                                            <?= ScheduleHelper::displayDiscipline($data, $dayId, $timeId) ?>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <?= ScheduleHelper::displayDisciplineTeacher($data, $dayId, $timeId) ?>
+                                        </div>
+                                    </div></div>
+                            </div>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
             </div>
-            <ul class="list-group list-group-flush">
-                <?php foreach(ScheduleHelper::timeList() as $timeId => $timeName): ?>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <span class="badge badge-secondary mr-3"><?= ScheduleHelper::timeName($timeId) ?></span>
-                        <?= ScheduleHelper::displayDiscipline($data, $dayId, $timeId) ?>
-                    </li>
-                <?php endforeach; ?>
-            </ul>
         </div>
-    </div>
     <?php endforeach; ?>
 </div>

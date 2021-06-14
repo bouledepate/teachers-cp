@@ -91,7 +91,7 @@ class ScheduleController extends \yii\web\Controller
 
         if($schedule->load(\Yii::$app->request->post()) && $schedule->validate()){
             $schedule->save(false);
-            return $this->redirect(['schedule/view', 'id' => $schedule->group_id, 'week' => $schedule->week]);
+            return $this->redirect(['schedule/edit', 'id' => $schedule->group_id, 'week' => $schedule->week]);
         }
 
         return $this->render('transfer', ['schedule' => $schedule]);
