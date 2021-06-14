@@ -1,6 +1,7 @@
 <?php
 
 /* @var $this \yii\web\View */
+
 /* @var $content string */
 
 use app\widgets\Alert;
@@ -47,110 +48,123 @@ AppAsset::register($this);
 <?php $this->beginBody() ?>
 <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
     <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="#">Univer</a>
-    <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-toggle="collapse" data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-toggle="collapse"
+            data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
-    <?php if(!\Yii::$app->user->isGuest): ?>
-    <span class="text-secondary">Вы авторизованы, как <strong><?= Yii::$app->user->identity->username ?></strong></span>
-    <ul class="navbar-nav px-3">
-        <li class="nav-item text-nowrap">
-            <a class="nav-link" href="<?= Url::to(['auth/logout']) ?>">Выйти из системы</a>
-        </li>
-    </ul>
+    <?php if (!\Yii::$app->user->isGuest): ?>
+        <span class="text-secondary">Вы авторизованы, как <strong><?= Yii::$app->user->identity->username ?></strong></span>
+        <ul class="navbar-nav px-3">
+            <li class="nav-item text-nowrap">
+                <a class="nav-link" href="<?= Url::to(['auth/logout']) ?>">Выйти из системы</a>
+            </li>
+        </ul>
     <?php else: ?>
-    <span class="text-secondary">Вы не авторизованы</strong></span>
-    <ul class="navbar-nav px-3">
-        <li class="nav-item text-nowrap">
-            <a class="nav-link" href="<?= Url::to(['auth/login']) ?>">Войти в систему</a>
-        </li>
-    </ul>
+        <span class="text-secondary">Вы не авторизованы</strong></span>
+        <ul class="navbar-nav px-3">
+            <li class="nav-item text-nowrap">
+                <a class="nav-link" href="<?= Url::to(['auth/login']) ?>">Войти в систему</a>
+            </li>
+        </ul>
     <?php endif; ?>
 </nav>
 
 <div class="container-fluid">
     <div class="row">
         <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
-            <?php if(!Yii::$app->user->isGuest): ?>
-            <div class="sidebar-sticky pt-3">
-                <ul class="nav flex-column mt-2">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/">
-                            <i class="fas fa-home"></i>
-                            Главная
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/profile">
-                            <i class="fas fa-user"></i>
-                            Ваш профиль
-                        </a>
-                    </li>
-                </ul>
-                <hr class="my-2">
-                <?php if(Yii::$app->user->can("viewAdminCategories")): ?>
-                <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-                    <span>Для администратора</span>
-                    <a class="d-flex align-items-center text-muted" href="#" aria-label="Add a new report">
-                        <span data-feather="plus-circle"></span>
-                    </a>
-                </h6>
-                <ul class="nav flex-column mt-2">
-                    <li class="nav-item">
-                        <a class="nav-link" href="<?= Url::to(['users/index']) ?>">
-                            <i class="fas fa-user-friends"></i>
-                            Пользователи
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="<?= Url::to(['groups/index']) ?>">
-                            <i class="fas fa-users"></i>
-                            Группы
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="<?= Url::to(['disciplines/index']) ?>">
-                            <i class="fas fa-graduation-cap"></i>
-                            Дисциплины
-                        </a>
-                    </li>
-                </ul>
-                <hr class="my-2">
-                <?php endif; ?>
-                <?php if(Yii::$app->user->can("viewTeacherCategories")): ?>
-                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-                        <span>Преподавателю</span>
-                        <a class="d-flex align-items-center text-muted" href="#" aria-label="Add a new report">
-                            <span data-feather="plus-circle"></span>
-                        </a>
-                    </h6>
+            <?php if (!Yii::$app->user->isGuest): ?>
+                <div class="sidebar-sticky pt-3">
                     <ul class="nav flex-column mt-2">
                         <li class="nav-item">
-                            <a class="nav-link" href="<?= Url::to(['estimates/index']) ?>">
-                                <i class="fas fa-book-open"></i>
-                                Журнал оценивания
+                            <a class="nav-link" href="/">
+                                <i class="fas fa-home"></i>
+                                Главная
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/profile">
+                                <i class="fas fa-user"></i>
+                                Ваш профиль
                             </a>
                         </li>
                     </ul>
                     <hr class="my-2">
-                <?php endif ?>
-                <?php if(Yii::$app->user->can("viewStudentCategories")): ?>
-                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-                        <span>Студенту</span>
-                        <a class="d-flex align-items-center text-muted" href="#" aria-label="Add a new report">
-                            <span data-feather="plus-circle"></span>
-                        </a>
-                    </h6>
-                    <ul class="nav flex-column mt-2">
-                        <li class="nav-item">
-                            <a class="nav-link" href="<?= Url::to(['diary/index']) ?>">
-                                <i class="fas fa-book"></i>
-                                Успеваемость
+                    <?php if (Yii::$app->user->can("viewAdminCategories")): ?>
+                        <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                            <span>Для администратора</span>
+                            <a class="d-flex align-items-center text-muted" href="#" aria-label="Add a new report">
+                                <span data-feather="plus-circle"></span>
                             </a>
-                        </li>
-                    </ul>
-                    <hr class="my-2">
-                <?php endif ?>
-            </div>
+                        </h6>
+                        <ul class="nav flex-column mt-2">
+                            <li class="nav-item">
+                                <a class="nav-link" href="<?= Url::to(['users/index']) ?>">
+                                    <i class="fas fa-user-friends"></i>
+                                    Пользователи
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="<?= Url::to(['groups/index']) ?>">
+                                    <i class="fas fa-users"></i>
+                                    Группы
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="<?= Url::to(['disciplines/index']) ?>">
+                                    <i class="fas fa-graduation-cap"></i>
+                                    Дисциплины
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="<?= Url::to(['schedule/index']) ?>">
+                                    <i class="far fa-calendar-alt"></i>
+                                    Расписание групп
+                                </a>
+                            </li>
+                        </ul>
+                        <hr class="my-2">
+                    <?php endif; ?>
+                    <?php if (Yii::$app->user->can("viewTeacherCategories")): ?>
+                        <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                            <span>Преподавателю</span>
+                            <a class="d-flex align-items-center text-muted" href="#" aria-label="Add a new report">
+                                <span data-feather="plus-circle"></span>
+                            </a>
+                        </h6>
+                        <ul class="nav flex-column mt-2">
+                            <li class="nav-item">
+                                <a class="nav-link" href="<?= Url::to(['estimates/index']) ?>">
+                                    <i class="fas fa-book-open"></i>
+                                    Журнал оценивания
+                                </a>
+                            </li>
+                        </ul>
+                        <hr class="my-2">
+                    <?php endif ?>
+                    <?php if (Yii::$app->user->can("viewStudentCategories")): ?>
+                        <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                            <span>Студенту</span>
+                            <a class="d-flex align-items-center text-muted" href="#" aria-label="Add a new report">
+                                <span data-feather="plus-circle"></span>
+                            </a>
+                        </h6>
+                        <ul class="nav flex-column mt-2">
+                            <li class="nav-item">
+                                <a class="nav-link" href="<?= Url::to(['diary/index']) ?>">
+                                    <i class="fas fa-book"></i>
+                                    Успеваемость
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="<?= Url::to(['schedule/index']) ?>">
+                                    <i class="far fa-calendar-alt"></i>
+                                    Расписание
+                                </a>
+                            </li>
+                        </ul>
+                        <hr class="my-2">
+                    <?php endif ?>
+                </div>
             <?php endif ?>
         </nav>
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">

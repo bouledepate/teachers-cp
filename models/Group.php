@@ -41,13 +41,6 @@ class Group extends ActiveRecord
         $group->save();
     }
 
-    public static function updateGroup($id, $params)
-    {
-        $group = Group::findOne(['id' => $id]);
-        $group->name = $params->name;
-        $group->save();
-    }
-
     public function getDisciplines()
     {
         return $this->hasMany(Discipline::class, ['id' => 'discipline_id'])
@@ -69,10 +62,31 @@ class Group extends ActiveRecord
         return $this->hasMany(User::class, ['group_id' => 'id']);
     }
 
+    private static function addDisciplinesToStudent($user, $groupId)
+    {
+        $group = Group::findOne(['id' => $groupId]);
+        $disciplines = $group->getDisciplines()->all();
+        foreach($disciplines as $discipline){
+            if(!$user->hasRelationWithDiscipline($discipline->id)){
+                $user->link('disciplines', $discipline);
+            }
+        }
+
+    }
+
+    private static function removeDisciplinesFromStudent($user){
+        $group = Group::findOne(['id' => $user->group_id]);
+        $disciplines = $group->getDisciplines()->all();
+        foreach($disciplines as $discipline){
+            $user->unlink('disciplines', $discipline);
+        }
+    }
+
     public static function addStudents($array, $groupId)
     {
         foreach ($array as $key => $value) {
             $user = User::findOne(['id' => $value]);
+            self::addDisciplinesToStudent($user, $groupId);
             $user->setGroup($groupId);
         }
     }
@@ -80,6 +94,7 @@ class Group extends ActiveRecord
     public static function removeStudent($id)
     {
         $user = User::findOne(['id' => $id]);
+        self::removeDisciplinesFromStudent($user);
         $user->setGroup(null);
     }
 

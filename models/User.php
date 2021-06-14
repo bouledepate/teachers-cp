@@ -198,7 +198,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
         $this->save();
     }
 
-    public function isTeacher($dId)
+    public function hasRelationWithDiscipline($dId)
     {
         return User::find()->joinWith('disciplines')->where([
             'user_discipline.user_id' => $this->id,

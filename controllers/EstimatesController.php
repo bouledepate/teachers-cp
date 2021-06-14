@@ -63,7 +63,7 @@ class EstimatesController extends Controller
             throw new NotFoundHttpException('Группы с идентификатором ' . $gId . ' не существует.');
         }
 
-        if (!\Yii::$app->user->identity->isTeacher($discipline->id) || !$group->hasDiscipline($discipline->id)) {
+        if (!\Yii::$app->user->identity->hasRelationWithDiscipline($discipline->id) || !$group->hasDiscipline($discipline->id)) {
             throw new ForbiddenHttpException('У вас нет доступа к данному журналу');
         }
 

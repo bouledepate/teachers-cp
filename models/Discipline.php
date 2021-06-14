@@ -5,6 +5,7 @@ namespace app\models;
 
 use yii\db\ActiveRecord;
 use yii\db\Query;
+use yii\helpers\ArrayHelper;
 
 /**
  * @property int $id
@@ -92,5 +93,16 @@ class Discipline extends ActiveRecord
                 ->where(['group_discipline.group_id' => $id])])
             ->asArray()
             ->all();
+    }
+
+    public static function getDisciplines($id)
+    {
+        $data = Discipline::find()
+            ->select(['discipline.id', 'discipline.name'])
+            ->joinWith('groups')
+            ->where(['group.id' => $id])
+            ->asArray()
+            ->all();
+        return ArrayHelper::map($data, 'id', 'name');
     }
 }
