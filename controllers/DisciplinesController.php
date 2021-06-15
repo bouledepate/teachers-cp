@@ -74,6 +74,7 @@ class DisciplinesController extends Controller
         if ($model->load(\Yii::$app->request->post()) && $model->validate()) {
             $discipline = Discipline::create($model, true);
             $discipline->setTeachers(\Yii::$app->request->post()['CreateDisciplineForm']['teacherId']);
+            \Yii::$app->session->setFlash('success', 'Дисциплина успешно добавлена.');
             return $this->redirect('/disciplines/index');
         }
 
@@ -93,6 +94,7 @@ class DisciplinesController extends Controller
 
         if($discipline->load(\Yii::$app->request->post()) && $discipline->validate()){
             $discipline->save(false);
+            \Yii::$app->session->setFlash('success', 'Данные о дисциплине обновлены.');
             return $this->redirect('/disciplines/index');
         }
 
@@ -105,6 +107,7 @@ class DisciplinesController extends Controller
     {
         $discipline = Discipline::findOne(['id' => $id]);
         $discipline->removeTeacher($userId);
+        \Yii::$app->session->setFlash('success', 'Вы успешно открепили преподавателя от дисциплины.');
 
         return $this->redirect(\Yii::$app->request->referrer);
     }
@@ -119,6 +122,7 @@ class DisciplinesController extends Controller
 
         if(\Yii::$app->request->post()){
             $discipline->setTeachers(\Yii::$app->request->post()['CreateDisciplineForm']['teacherId']);
+            \Yii::$app->session->setFlash('success', 'Вы успешно закрепили преподавателя(-ей) за дисциплиной.');
         }
 
         return $this->redirect(\Yii::$app->request->referrer);

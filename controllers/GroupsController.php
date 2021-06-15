@@ -99,6 +99,9 @@ class GroupsController extends Controller
 
         if ($group->load(\Yii::$app->request->post()) && $group->validate()) {
             $group->save(false);
+
+            \Yii::$app->session->setFlash('success', 'Данные группы изменены.');
+
             return $this->redirect(['groups/view', 'id' => $id]);
         }
 
@@ -113,6 +116,7 @@ class GroupsController extends Controller
 
         if ($model->load(\Yii::$app->request->post()) && $model->validate()) {
             Group::addStudents(\Yii::$app->request->post()['AddStudentForm']['studentId'], $id);
+            \Yii::$app->session->setFlash('success', 'Студенты зачислены в группу.');
         }
 
         return $this->redirect(Yii::$app->request->referrer);
@@ -121,6 +125,7 @@ class GroupsController extends Controller
     public function actionRemoveStudent($id)
     {
         Group::removeStudent($id);
+        \Yii::$app->session->setFlash('success', 'Студен был исключён из группы.');
         return $this->redirect(Yii::$app->request->referrer);
     }
 
@@ -131,6 +136,7 @@ class GroupsController extends Controller
 
         if ($model->load(\Yii::$app->request->post()) && $model->validate()) {
             $group->addDisciplines(\Yii::$app->request->post()['AddDisciplineForm']['disciplineId']);
+            \Yii::$app->session->setFlash('success', 'Дисциплины были успешно закреплены за группой.');
         }
 
         return $this->redirect(Yii::$app->request->referrer);
@@ -140,6 +146,7 @@ class GroupsController extends Controller
     {
         $group = Group::findOne(['id' => $id]);
         $group->removeDiscipline($disciplineId);
+        \Yii::$app->session->setFlash('success', 'Дисциплина успешно откреплены от группы.');
         return $this->redirect(\Yii::$app->request->referrer);
     }
 }

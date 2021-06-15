@@ -8,6 +8,7 @@ use yii\base\BaseObject;
 use yii\data\ActiveDataProvider;
 
 use yii\filters\AccessControl;
+use yii\helpers\Html;
 use yii\web\Controller;
 use yii\web\ForbiddenHttpException;
 
@@ -72,6 +73,7 @@ class UsersController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $user = User::create($model);
             Profile::create($user->id);
+            \Yii::$app->session->setFlash('success', 'Пользователь создан. Пароль: ' . $model->password);
             return $this->redirect('/users/index');
         }
 
@@ -90,6 +92,12 @@ class UsersController extends Controller
 
         if (\Yii::$app->user->getId() != $user->id) {
             $user->changeStatus();
+            if($user->status){
+                $message = 'Пользователь ' . $user->username . ' был разблокирован.';
+            } else {
+                $message = 'Пользователь ' . Html::tag('strong', $user->username) . ' был заблокирован.';
+            }
+            \Yii::$app->session->setFlash('info', $message);
         }
 
         return $this->redirect(Yii::$app->request->referrer);
@@ -100,9 +108,9 @@ class UsersController extends Controller
         $user = User::findOne($id);
         $profile = Profile::findOne($id);
         $items = [
-            1 => 'Администратор',
-            2 => 'Преподаватель',
-            3 => 'Студент'
+            'admin' => 'Администратор',
+            'teacher' => 'Преподаватель',
+            'student' => 'Студент'
         ];
         $params = [
             'prompt' => 'Выберите роль...',
@@ -120,6 +128,9 @@ class UsersController extends Controller
                 $user->setRole(Yii::$app->request->post()['User']['role']);
                 $user->save(false);
                 $profile->save(false);
+
+                \Yii::$app->session->setFlash('success', 'Данные пользователя успешно обновлены.');
+
                 return $this->redirect(['/users/view', 'id' => $id]);
             }
         }
@@ -144,6 +155,9 @@ class UsersController extends Controller
         if ($model->load(\Yii::$app->request->post()) && $model->validate()) {
             $user->setPassword($model->password);
             $user->save();
+
+            \Yii::$app->session->setFlash('success', 'Пароль изменён: ' . $model->password);
+
             return $this->redirect(['/users/view', 'id' => $id]);
         }
 

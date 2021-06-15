@@ -22,8 +22,13 @@ class ScheduleController extends \yii\web\Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => [],
+                        'actions' => ['edit', 'add', 'transfer', 'remove', 'index'],
                         'roles' => ['viewAdminCategories']
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['view'],
+                        'roles' => ['viewStudentCategories', 'viewAdminCategories']
                     ]
                 ]
             ]
@@ -42,8 +47,20 @@ class ScheduleController extends \yii\web\Controller
     }
 
     public function actionView($id, $week){
+        if(!$id){
+            \Yii::$app->session->setFlash('warning', 'Не указана группа для отображения расписания.');
+            return $this->redirect(\Yii::$app->request->referrer);
+        }
+
         $group = Group::findOne(['id' => $id]);
+
+        if(!$group){
+            \Yii::$app->session->setFlash('danger', 'Выбранной группы не существует.');
+            return $this->redirect(['schedule/index']);
+        }
+
         $data = Schedule::find()->where(['group_id' => $id, 'week' => $week])->orderBy('time')->all();
+
         return $this->render('view', [
             'group' => $group,
             'data' => $data,
@@ -54,6 +71,11 @@ class ScheduleController extends \yii\web\Controller
         $model = new ScheduleForm();
         $disciplines = Discipline::getDisciplines($id);
         $group = Group::findOne(['id' => $id]);
+
+        if(!$group){
+            \Yii::$app->session->setFlash('danger', 'Выбранной группы не существует.');
+            return $this->redirect(['schedule/index']);
+        }
 
         $day = \yii::$app->request->post('day');
         if(!$day){
@@ -80,7 +102,7 @@ class ScheduleController extends \yii\web\Controller
 
         if($model->load(\Yii::$app->request->post()) && $model->validate()){
             Schedule::create($model);
-            \Yii::$app->session->setFlash('success', 'Внесены коррективы в расписание группы.');
+            \Yii::$app->session->setFlash('success', 'Внесены корректировки в расписание группы.');
         }
 
         return $this->redirect(\Yii::$app->request->referrer);
@@ -91,6 +113,7 @@ class ScheduleController extends \yii\web\Controller
 
         if($schedule->load(\Yii::$app->request->post()) && $schedule->validate()){
             $schedule->save(false);
+            \Yii::$app->session->setFlash('success', 'Дисциплина успешно перенесена на другое время.');
             return $this->redirect(['schedule/edit', 'id' => $schedule->group_id, 'week' => $schedule->week]);
         }
 
@@ -100,6 +123,8 @@ class ScheduleController extends \yii\web\Controller
     public function actionRemove($id){
         $schedule = Schedule::findOne(['id' => $id]);
         $schedule->delete();
+
+        \Yii::$app->session->setFlash('success', 'Дисциплина успешно убрана из расписания.');
 
         return $this->redirect(\Yii::$app->request->referrer);
     }

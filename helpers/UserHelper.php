@@ -16,9 +16,42 @@ class UserHelper
         ];
     }
 
+    public static function roleList()
+    {
+        return [
+            'admin' => 'Администратор',
+            'teacher' => 'Преподаватель',
+            'student' => 'Студент'
+        ];
+    }
+
     public static function statusName($status)
     {
         return ArrayHelper::getValue(self::statusList(), $status);
+    }
+
+    public static function roleName($role)
+    {
+        return ArrayHelper::getValue(self::roleList(), $role);
+    }
+
+    public static function roleLabel($role)
+    {
+        switch ($role) {
+            case 'admin':
+                $class = 'badge badge-danger';
+                break;
+            case 'teacher':
+                $class = 'badge badge-primary';
+                break;
+            case 'student':
+                $class = 'badge badge-secondary';
+                break;
+        }
+
+        return Html::tag('span', ArrayHelper::getValue(self::roleList(), $role), [
+            'class' => $class
+        ]);
     }
 
     public static function statusLabel($status)

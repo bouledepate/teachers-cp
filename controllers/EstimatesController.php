@@ -81,6 +81,7 @@ class EstimatesController extends Controller
         $model = new AddEstimateForm();
         if ($model->load(\Yii::$app->request->post()) && $model->validate()) {
             Estimate::add($model);
+            \Yii::$app->session->setFlash('success', 'Оценка выставлена.');
         }
         return $this->redirect(\Yii::$app->request->referrer);
     }
