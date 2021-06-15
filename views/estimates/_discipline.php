@@ -5,6 +5,8 @@ use yii\helpers\Url;
 use yii\widgets\DetailView;
 
 ?>
+
+
 <div class="post mt-2">
     <h4><?= $model->name ?></h4>
     <?php foreach ($model->groups as $group): ?>

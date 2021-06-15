@@ -23,11 +23,13 @@ $this->title = 'Перенести занятие';
     </div>
 </div>
 <?= \app\widgets\Alert::widget() ?>
-<?php $form = ActiveForm::begin([
-    'layout' => 'horizontal'
-]); ?>
-<?= $form->field($schedule, 'week')->dropdownList(ScheduleHelper::weekList(), ['prompt' => 'Тип недели']) ?>
-<?= $form->field($schedule, 'day')->dropdownList(ScheduleHelper::dayList(), ['prompt' => 'День недели']) ?>
-<?= $form->field($schedule, 'time')->dropdownList(ScheduleHelper::timeList(), ['prompt' => 'Время проведения']) ?>
-<?= Html::submitButton('Перенести занятие', ['class' => 'btn btn-success']); ?>
-<?php ActiveForm::end(); ?>
+<div class="container">
+    <?php $form = ActiveForm::begin([
+        'layout' => 'horizontal'
+    ]); ?>
+    <?= $form->field($schedule, 'week')->dropdownList(ScheduleHelper::weekList(), ['prompt' => 'Тип недели']) ?>
+    <?= $form->field($schedule, 'day')->dropdownList(ScheduleHelper::dayList(), ['prompt' => 'День недели']) ?>
+    <?= $form->field($schedule, 'time')->dropdownList(ScheduleHelper::timeList(), ['prompt' => 'Время проведения']) ?>
+    <?= Html::submitButton('Перенести занятие', ['class' => 'btn btn-success']); ?>
+    <?php ActiveForm::end(); ?>
+</div>

@@ -24,7 +24,8 @@ $this->title = 'Профиль ' . $user->username;
         </div>
     <?php endif; ?>
 </div>
-<div class="content">
+<?= \app\widgets\Alert::widget(); ?>
+<div class="container">
     <div class="row">
         <div class="col-5">
             <p class="alert alert-success">Статус в системе: <strong><?= $user->getRole() ?></strong></p>

@@ -2,13 +2,11 @@
 
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap4\ActiveForm */
-/* @var $model app\models\LoginForm */
 
 use yii\helpers\Html;
 use yii\bootstrap4\ActiveForm;
 
 $this->title = 'Авторизация';
-$this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <?php $form = ActiveForm::begin([

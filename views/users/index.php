@@ -20,7 +20,8 @@ $this->title = "Пользователи";
         </div>
     </div>
 </div>
-<div>
+<?= \app\widgets\Alert::widget() ?>
+<div class="container">
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,

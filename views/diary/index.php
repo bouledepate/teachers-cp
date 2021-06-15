@@ -7,11 +7,15 @@ use yii\helpers\Url;
 /**
  * @var \yii\data\ActiveDataProvider $dataProvider
  */
-$this->title = "Успеваемость";
-?>
+$this->title = "Успеваемость"; ?>
+
+
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2"><?= Html::encode($this->title) ?></h1>
 </div>
+
+<?= \app\widgets\Alert::widget(); ?>
+
 <div class="container">
     <?= GridView::widget([
         'dataProvider' => $dataProvider,

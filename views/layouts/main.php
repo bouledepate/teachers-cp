@@ -156,7 +156,10 @@ AppAsset::register($this);
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="<?= Url::to(['schedule/index']) ?>">
+                                <a class="nav-link"
+                                   href="<?= Url::to(['schedule/view', 'id' => \Yii::$app->user->identity->group_id ?
+                                       \Yii::$app->user->identity->group_id : 0,
+                                       'week' => \app\models\Schedule::WEEK_NUM]) ?>">
                                     <i class="far fa-calendar-alt"></i>
                                     Расписание
                                 </a>

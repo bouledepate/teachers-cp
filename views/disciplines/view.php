@@ -11,8 +11,9 @@ use yii\helpers\Url;
 use yii\widgets\DetailView;
 use yii\bootstrap4\ActiveForm;
 
-$this->title = $discipline->name;
-?>
+$this->title = $discipline->name; ?>
+
+
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2">Дисциплина: <?= $discipline->name ?></h1>
     <div class="btn-toolbar mb-2 mb-md-0">
@@ -23,6 +24,9 @@ $this->title = $discipline->name;
         </div>
     </div>
 </div>
+
+<?= \app\widgets\Alert::widget(); ?>
+
 <div class="container">
     <?= DetailView::widget([
         'model' => $discipline,
