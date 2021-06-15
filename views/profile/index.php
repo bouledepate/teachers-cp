@@ -10,9 +10,7 @@ use yii\widgets\DetailView;
 $this->title = 'Профиль ' . $user->username;
 ?>
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-
-    <h1 class="h3"><?= $user->username ?></h1>
-
+    <h1 class="h3"><?= (\Yii::$app->user->getId() === $user->id) ? "Ваш профиль" : "Профиль" ?></h1>
     <?php if (Yii::$app->user->can("viewAdminCategories")): ?>
         <div class="btn-toolbar mb-2 mb-md-0">
             <div class="btn-group mr-2">
@@ -46,6 +44,7 @@ $this->title = 'Профиль ' . $user->username;
             </div>
         </div>
         <div class="col">
+            <h1 class="h3 mb-3"><?= $user->username ?></h1>
             <?= DetailView::widget([
                 'model' => $user->profile,
                 'options' => [

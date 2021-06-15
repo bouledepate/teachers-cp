@@ -18,8 +18,8 @@ $this->title = 'Изменение пароля' ?>
             'fieldConfig' => ['template' => "{label}\n{input}\n{hint}\n{error}"]
         ]) ?>
     <div class="form-row">
-        <div class="col"><?= $form->field($model, 'password')->label('Введите пароль') ?></div>
-        <div class="col"><?= $form->field($model, 'password_repeat')->label('Повторите пароль') ?></div>
+        <div class="col"><?= $form->field($model, 'password')->label('Введите пароль')->passwordInput() ?></div>
+        <div class="col"><?= $form->field($model, 'password_repeat')->label('Повторите пароль')->passwordInput() ?></div>
     </div>
     <?= Html::submitButton('Обновить', ['class' => 'btn btn-primary']) ?>
     <?php ActiveForm::end() ?>
