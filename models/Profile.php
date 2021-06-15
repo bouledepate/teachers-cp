@@ -4,6 +4,7 @@
 namespace app\models;
 
 
+use app\forms\UploadImageForm;
 use yii\db\ActiveRecord;
 
 /**
@@ -12,6 +13,7 @@ use yii\db\ActiveRecord;
  * @property int $id
  * @property int $user_id
  * @property string $first_name
+ * @property string $avatar
  * @property-read mixed $user
  * @property-read string $fullName
  * @property-read string $firstName
@@ -85,5 +87,22 @@ class Profile extends ActiveRecord
     public function getFullName()
     {
         return $this->first_name . ' ' . $this->last_name;
+    }
+
+    public function getImage()
+    {
+        return ($this->avatar) ? '/images/' . $this->avatar : '/images/' . 'no-avatar.png';
+    }
+
+    public function saveImage($filename)
+    {
+        $this->avatar = $filename;
+        return $this->save(false);
+    }
+
+    public function deleteImage()
+    {
+        $imageUploadModel = new UploadImageForm();
+        $imageUploadModel->deleteCurrentImage($this->image);
     }
 }

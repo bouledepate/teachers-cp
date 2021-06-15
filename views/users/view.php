@@ -20,7 +20,7 @@ $this->title = $user->username; ?>
                 <?= $user->status ? '<i class="fas fa-ban"></i> Заблокировать' :
                     '<i class="far fa-check-circle"></i> Разблокировать' ?>
             </a>
-            <a href="<?= Url::to(['users/update', 'id'=>$user->id]) ?>" class="btn btn-sm btn-outline-success">
+            <a href="<?= Url::to(['users/update', 'id' => $user->id]) ?>" class="btn btn-sm btn-outline-success">
                 <i class="bi bi-pencil-square"></i> Изменить
             </a>
         </div>
@@ -39,7 +39,7 @@ $this->title = $user->username; ?>
             ],
             [
                 'label' => 'Тип пользователя',
-                'value' => function($data){
+                'value' => function ($data) {
                     return UserHelper::roleName($data->role);
                 }
             ],
@@ -82,6 +82,22 @@ $this->title = $user->username; ?>
                 'attribute' => 'id',
                 'captionOptions' => ['width' => '25%'],
                 'contentOptions' => ['width' => '75%'],
+            ],
+            [
+                'label' => 'Фотография',
+                'format' => 'html',
+                'value' => function ($data) {
+                    return Html::img($data->getImage(), ['width' => 150, 'height'=>150]);
+                }
+            ],
+            [
+                'label' => '',
+                'format' => 'html',
+                'value' => function ($data) {
+                    return Html::a('Изменить фотографию',
+                        ['users/set-image', 'id' => $data->id],
+                        ['class' => 'btn btn-sm btn-primary']);
+                }
             ],
             [
                 'label' => 'Имя',

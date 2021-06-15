@@ -20,10 +20,12 @@ $this->title = "Расписание группы " . $group->name;
                class="btn btn-sm btn-outline-secondary">
                 <i class="fas fa-arrow-circle-right"></i> <?= ScheduleHelper::weekName($weekId ? 0 : 1) ?>
             </a>
+            <?php if(\Yii::$app->user->can('viewAdminCategories')): ?>
             <a href="<?= Url::to(['schedule/edit', 'id' => $group->id, 'week' => $weekId]) ?>"
                class="btn btn-sm btn-outline-secondary">
                 <i class="fas fa-tasks"></i> <?= $data ? "Изменить" : "Заполнить" ?>
             </a>
+            <?php endif; ?>
         </div>
     </div>
 </div>

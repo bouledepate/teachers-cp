@@ -3,6 +3,7 @@
 
 namespace app\controllers;
 
+use app\forms\UploadImageForm;
 use Yii;
 use yii\base\BaseObject;
 use yii\data\ActiveDataProvider;
@@ -19,6 +20,7 @@ use app\models\User;
 use app\models\Profile;
 use app\models\search\UserSearch;
 use yii\web\NotFoundHttpException;
+use yii\web\UploadedFile;
 
 
 class UsersController extends Controller
@@ -139,7 +141,7 @@ class UsersController extends Controller
             'user' => $user,
             'profile' => $profile,
             'items' => $items,
-            'params' => $params
+            'params' => $params,
         ]);
     }
 
@@ -163,6 +165,25 @@ class UsersController extends Controller
 
         return $this->render('change-password', [
             'model' => $model
+        ]);
+    }
+
+    public function actionSetImage($id){
+        $model = new UploadImageForm();
+        $profile = Profile::findOne(['id' => $id]);
+
+        if (\Yii::$app->request->isPost){
+
+            $file = UploadedFile::getInstance($model, 'image');
+
+            if($profile->saveImage($model->uploadImage($file, $profile->avatar))){
+                return $this->redirect(['users/view', 'id' => $profile->user_id]);
+            }
+        }
+
+        return $this->render('set-image', [
+            'model' => $model,
+            'profile' => $profile
         ]);
     }
 }

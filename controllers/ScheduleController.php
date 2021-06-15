@@ -10,6 +10,8 @@ use app\models\Schedule;
 use app\forms\ScheduleForm;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
+use yii\web\ForbiddenHttpException;
+use yii\web\NotFoundHttpException;
 
 class ScheduleController extends \yii\web\Controller
 {
@@ -47,16 +49,16 @@ class ScheduleController extends \yii\web\Controller
     }
 
     public function actionView($id, $week){
-        if(!$id){
-            \Yii::$app->session->setFlash('warning', 'Не указана группа для отображения расписания.');
-            return $this->redirect(\Yii::$app->request->referrer);
-        }
-
         $group = Group::findOne(['id' => $id]);
 
         if(!$group){
-            \Yii::$app->session->setFlash('danger', 'Выбранной группы не существует.');
-            return $this->redirect(['schedule/index']);
+            throw new NotFoundHttpException('Расписание не может быть отображено: Группы не существует.');
+        }
+
+        if(\Yii::$app->user->identity->role === 'student'){
+            if($group->id !== \Yii::$app->user->identity->group_id){
+                throw new ForbiddenHttpException('Вы не можете просматривать расписание не своей группы.');
+            }
         }
 
         $data = Schedule::find()->where(['group_id' => $id, 'week' => $week])->orderBy('time')->all();

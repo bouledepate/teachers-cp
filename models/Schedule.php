@@ -34,7 +34,7 @@ class Schedule extends \yii\db\ActiveRecord
     public function rules(): array
     {
         return [
-            'required' => [['discipline_id', 'group_id'], 'required'],
+            'required' => [['discipline_id', 'group_id', 'week', 'time', 'day'], 'required'],
             'integer' => [['group_id', 'discipline_id', 'day', 'time', 'week'], 'integer'],
             'time' => ['time', 'validateTime']
         ];

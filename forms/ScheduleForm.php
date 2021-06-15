@@ -17,7 +17,7 @@ class ScheduleForm extends \yii\base\Model
     public function rules()
     {
         return [
-            'required' => [['groupId', 'week', 'disciplineId'], 'required'],
+            'required' => [['groupId', 'week', 'disciplineId', 'week', 'time', 'day'], 'required'],
             'integer' => [['groupId', 'disciplineId', 'week', 'time', 'day'], 'integer'],
             'time' => ['time', 'validateTime']
         ];
