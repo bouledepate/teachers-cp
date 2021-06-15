@@ -22,7 +22,6 @@ $this->title = 'Журнал группы ' . $group->name ?>
     <h1 class="h2">Журнал группы <?= $group->name ?></h1>
     <p class="lead"><?= $discipline->name ?></p>
 </div>
-<?= \app\widgets\Alert::widget(); ?>
 <div class="container">
     <?php Pjax::begin(); ?>
     <div class="row">

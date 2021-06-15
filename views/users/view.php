@@ -1,15 +1,17 @@
 <?php
 
-/* @var $user yii\models\User */
+/* @var $user app\models\User */
 
-/* @var $profile yii\models\Profile */
+/* @var $profile app\models\Profile */
 
+use app\helpers\UserHelper;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\DetailView;
 
-$this->title = $user->username;
-?>
+$this->title = $user->username; ?>
+
+
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2">Информация о пользователе <?= $user->username ?></h1>
     <div class="btn-toolbar mb-2 mb-md-0">
@@ -31,11 +33,15 @@ $this->title = $user->username;
         'attributes' => [
             [
                 'label' => 'ID',
-                'attribute' => 'id'
+                'attribute' => 'id',
+                'captionOptions' => ['width' => '25%'],
+                'contentOptions' => ['width' => '75%'],
             ],
             [
                 'label' => 'Тип пользователя',
-                'value' => $user->getRole()
+                'value' => function($data){
+                    return UserHelper::roleName($data->role);
+                }
             ],
             [
                 'label' => 'Статус аккаунта',
@@ -54,24 +60,13 @@ $this->title = $user->username;
             ],
             [
                 'label' => 'Пароль',
-                'attribute' => 'password',
                 'visible' => (bool)Yii::$app->authManager->getAssignment('admin', \Yii::$app->user->getId()),
                 'value' => function ($data) {
                     $url = Url::to(['users/change-password', 'id' => $data->id]);
-                    return $data->password . Html::a(' (изменить)', $url);
+                    return Html::a(' (изменить)', $url);
                 },
                 'format' => 'raw'
-            ],
-            [
-                'label' => 'Ключ авторизации',
-                'attribute' => 'auth_key',
-                'visible' => (bool)Yii::$app->authManager->getAssignment('admin', \Yii::$app->user->getId()),
-            ],
-            [
-                'label' => 'Токен доступа',
-                'attribute' => 'access_token',
-                'visible' => (bool)Yii::$app->authManager->getAssignment('admin', \Yii::$app->user->getId()),
-            ],
+            ]
         ],
     ])
     ?>

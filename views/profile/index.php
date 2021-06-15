@@ -10,7 +10,15 @@ use yii\widgets\DetailView;
 $this->title = 'Профиль ' . $user->username;
 ?>
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class="h2"><?= $user->username ?></h1>
+    <div class="row">
+        <div class="col">
+            <div class="row">
+                <div class="col"> <h1 class="h3"><?= $user->username ?></h1></div>
+            </div>
+            <div class="row">
+                <div class="col"><div class="h6"><?= \app\helpers\UserHelper::roleLabel($user->role) ?></div></div>
+            </div></div>
+    </div>
     <?php if (Yii::$app->user->can("viewAdminCategories")): ?>
         <div class="btn-toolbar mb-2 mb-md-0">
             <div class="btn-group mr-2">
@@ -26,11 +34,6 @@ $this->title = 'Профиль ' . $user->username;
 </div>
 <?= \app\widgets\Alert::widget(); ?>
 <div class="container">
-    <div class="row">
-        <div class="col-5">
-            <p class="alert alert-success">Статус в системе: <strong><?= $user->getRole() ?></strong></p>
-        </div>
-    </div>
     <?= DetailView::widget([
         'model' => $user->profile,
         'options' => [

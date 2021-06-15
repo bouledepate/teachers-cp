@@ -4,8 +4,8 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /**
- * @var $user yii\models\User
- * @var $profile yii\models\Profile
+ * @var $user app\models\User
+ * @var $profile app\models\Profile
  * @var $items array
  * @var $params array
  */
