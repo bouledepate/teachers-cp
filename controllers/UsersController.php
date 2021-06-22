@@ -4,6 +4,7 @@
 namespace app\controllers;
 
 use app\forms\UploadImageForm;
+use app\helpers\UserHelper;
 use Yii;
 use yii\base\BaseObject;
 use yii\data\ActiveDataProvider;
@@ -94,12 +95,7 @@ class UsersController extends Controller
 
         if (\Yii::$app->user->getId() != $user->id) {
             $user->changeStatus();
-            if($user->status){
-                $message = 'Пользователь ' . $user->username . ' был разблокирован.';
-            } else {
-                $message = 'Пользователь ' . Html::tag('strong', $user->username) . ' был заблокирован.';
-            }
-            \Yii::$app->session->setFlash('info', $message);
+            \Yii::$app->session->setFlash('info', UserHelper::getBlockMessageToFlash($user));
         }
 
         return $this->redirect(Yii::$app->request->referrer);

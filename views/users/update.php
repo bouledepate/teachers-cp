@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
 /**
@@ -40,6 +41,24 @@ $this->title = 'Редактирование пользователя ' . $user-
         <div class="col"><?= $form->field($profile, 'first_name')->label('Имя')->textInput(['placeholder' => 'Не установлено']) ?></div>
         <div class="col"><?= $form->field($profile, 'last_name')->label('Фамилия')->textInput(['placeholder' => 'Не установлено']) ?></div>
     </div>
-    <?= Html::submitButton('Обновить', ['class' => 'btn btn-primary']) ?>
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <div class="card-body bg-light">
+                    <h6 class="card-title">Фотография профиля</h6>
+                </div>
+                <div class="card-body">
+                    <?= Html::img($profile->getImage(), ['width' => 150, 'class' => 'rounded-lg']) ?>
+                </div>
+                <div class="card-body bg-light">
+                    <a href="<?= Url::to(['users/set-image', 'id' => $profile->id]) ?>" class="btn btn-primary">Изменить</a>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <h6>Завершение редактирования профиля</h6>
+            <?= Html::submitButton('Обновить', ['class' => 'btn btn-success']) ?>
+        </div>
+    </div>
     <?php ActiveForm::end() ?>
 </div>

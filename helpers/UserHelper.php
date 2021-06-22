@@ -71,4 +71,12 @@ class UserHelper
             'class' => $class,
         ]);
     }
+
+    public static function getBlockMessageToFlash(User $user)
+    {
+        if ($user->status) {
+            return 'Пользователь ' . $user->username . ' был разблокирован.';
+        }
+        return 'Пользователь ' . Html::tag('strong', $user->username) . ' был заблокирован.';
+    }
 }

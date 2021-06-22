@@ -4,6 +4,7 @@
 namespace app\controllers;
 
 
+use app\helpers\ScheduleHelper;
 use app\models\Discipline;
 use app\models\Group;
 use app\models\Schedule;
@@ -24,7 +25,7 @@ class ScheduleController extends \yii\web\Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['edit', 'add', 'transfer', 'remove', 'index'],
+                        'actions' => [],
                         'roles' => ['viewAdminCategories']
                     ],
                     [
@@ -69,6 +70,21 @@ class ScheduleController extends \yii\web\Controller
         ]);
     }
 
+    public function actionGetDisciplines($id, $week){
+        if(\Yii::$app->request->post('day')){
+            $day = \Yii::$app->request->post('day');
+        } else {
+            $day = Schedule::DAY_MONDAY;
+        }
+
+        $query = Schedule::find()->where(['group_id' => $id, 'week' => $week, 'day' => (int)$day])->orderBy('time');
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query
+        ]);
+
+        return ScheduleHelper::displayScheduleByDay($dataProvider);;
+    }
+
     public function actionEdit($id, $week){
         $model = new ScheduleForm();
         $disciplines = Discipline::getDisciplines($id);
@@ -80,21 +96,11 @@ class ScheduleController extends \yii\web\Controller
         }
 
         $day = \yii::$app->request->post('day');
-        if(!$day){
-            $day = Schedule::DAY_MONDAY;
-        }
-
-        $data = Schedule::find()->where(['group_id' => $id, 'week' => $week, 'day' => $day])->orderBy('time');
-        $dataProvider = new ActiveDataProvider([
-            'query' => $data
-        ]);
 
         return $this->render('edit', [
             'disciplines' => $disciplines,
-            'data' => $data->all(),
             'model' => $model,
             'group' => $group,
-            'dataProvider' => $dataProvider,
             'day' => $day
         ]);
     }

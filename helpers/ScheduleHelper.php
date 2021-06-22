@@ -99,4 +99,45 @@ class ScheduleHelper
         }
     }
 
+    public static function displayScheduleByDay($dataProvider){
+        return \yii\grid\GridView::widget([
+            'dataProvider' => $dataProvider,
+            'tableOptions' => [
+                'class' => 'table table-sm table-bordered table-striped'
+            ],
+            'columns' => [
+                [
+                    'label' => 'Время',
+                    'value' => function ($data) {
+                        return self::timeName($data->time);
+                    }
+                ],
+                [
+                    'label' => 'Дисциплина',
+                    'attribute' => 'discipline.name'
+                ],
+                [
+                    'class' => 'yii\grid\ActionColumn',
+                    'header' => 'Действия',
+                    'template' => '{transfer} {remove}',
+                    'buttons' => [
+                        'transfer' => function ($url, $model, $key) {
+                            $title = 'Переместить';
+                            $options = [
+                                'title' => $title
+                            ];
+                            return Html::a('<i class="fas fa-random"></i>', $url, $options);
+                        },
+                        'remove' => function ($url, $model, $key) {
+                            $title = 'Убрать';
+                            $options = [
+                                'title' => $title
+                            ];
+                            return Html::a('<i class="fas fa-trash-alt"></i>', $url, $options);
+                        }
+                    ]
+                ],
+            ]
+        ]);
+    }
 }

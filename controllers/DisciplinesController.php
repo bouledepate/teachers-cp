@@ -39,6 +39,7 @@ class DisciplinesController extends Controller
         $dataProvider = new ActiveDataProvider([
             'query' => Discipline::find()
         ]);
+
         return $this->render('index', [
             'dataProvider' => $dataProvider,
         ]);
@@ -53,7 +54,7 @@ class DisciplinesController extends Controller
         ]);
         $data = User::getTeachersByDiscipline($id);
 
-        if($discipline === null){
+        if(!$discipline){
             throw new NotFoundHttpException('Предмет в базе не найден');
         }
 

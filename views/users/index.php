@@ -25,16 +25,11 @@ $this->title = "Пользователи";
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'layout'=>"{summary}\n{items}",
         'tableOptions' => [
             'class' => 'table table-striped table-bordered table-sm'
         ],
-        'pager' => [
-            'firstPageLabel' => '<<',
-            'lastPageLabel' => '>>',
-            'nextPageLabel' => '<',
-            'prevPageLabel' => '>',
-            'maxButtonCount' => 5,
-        ],
+
         'columns' => [
             [
                 'label' => 'ID',
@@ -74,4 +69,10 @@ $this->title = "Пользователи";
             ],
         ],
     ]); ?>
+    <?= \yii\bootstrap4\LinkPager::widget([
+        'pagination'=>$dataProvider->pagination,
+        'maxButtonCount' => 3,
+        'nextPageLabel' => '>>',
+        'prevPageLabel' => '<<',
+    ]) ?>
 </div>
