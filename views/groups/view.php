@@ -97,7 +97,7 @@ $this->title = 'Группа ' . $group->name; ?>
             <?php $form = ActiveForm::begin(['layout' => 'default',
                 'action' => Url::to(['groups/add-student', 'id' => $group->id]),
                 'fieldConfig' => ['template' => "{beginWrapper}\n{input}\n{hint}\n{error}\n{endWrapper}"]]) ?>
-            <?= $form->field($studentModel, 'studentId')->widget(Select2::className(), ['bsVersion' => 4,
+            <?= $form->field($studentModel, 'studentId')->widget(Select2::className(), [
                 'data' => $studentData,
                 'options' => ['placeholder' => 'Выберите студента',
                     'multiple' => true,
@@ -139,7 +139,7 @@ $this->title = 'Группа ' . $group->name; ?>
             <?php $form = ActiveForm::begin(['layout' => 'default',
                 'action' => Url::to(['groups/add-discipline', 'id' => $group->id]),
                 'fieldConfig' => ['template' => "{beginWrapper}\n{input}\n{hint}\n{error}\n{endWrapper}"]]) ?>
-            <?= $form->field($disciplineModel, 'disciplineId')->widget(Select2::className(), ['bsVersion' => 4,
+            <?= $form->field($disciplineModel, 'disciplineId')->widget(Select2::className(), [
                 'data' => $disciplineData,
                 'options' => ['placeholder' => 'Выберите дисциплину',
                     'multiple' => true,

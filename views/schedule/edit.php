@@ -98,7 +98,7 @@ $this->title = "Изменение расписания";
                 'fieldConfig' => ['template' => "{beginWrapper}\n{input}\n{hint}\n{error}\n{endWrapper}"]
             ]); ?>
             <?= $form->field($model, 'day')
-                ->dropdownList(ScheduleHelper::dayList(), ['prompt' => 'День недели', 'disabled' => 'true']) ?>
+                ->dropdownList(ScheduleHelper::dayList(), ['prompt' => 'День недели']) ?>
             <?= $form->field($model, 'disciplineId')
                 ->widget(Select2::className(), [
                     'bsVersion' => 4,

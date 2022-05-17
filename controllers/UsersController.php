@@ -104,7 +104,7 @@ class UsersController extends Controller
     public function actionUpdate($id)
     {
         $user = User::findOne($id);
-        $profile = Profile::findOne($id);
+        $profile = $user->profile;
         $items = [
             'admin' => 'Администратор',
             'teacher' => 'Преподаватель',

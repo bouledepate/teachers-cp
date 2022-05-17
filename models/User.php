@@ -145,17 +145,10 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
         return Yii::$app->security->validatePassword($password, $this->password);
     }
 
-    public function setRole($role_id)
+    public function setRole($role)
     {
         $auth = Yii::$app->authManager;
-        if ($role_id !== '') {
-            if ($role_id === '1') {
-                $role = 'admin';
-            } elseif ($role_id === '2') {
-                $role = 'teacher';
-            } else {
-                $role = 'student';
-            }
+        if ($role) {
             $auth->revokeAll($this->id);
             $auth->assign($auth->getRole($role), $this->id);
         }

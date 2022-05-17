@@ -70,7 +70,6 @@ class DisciplinesController extends Controller
     {
         $model = new CreateDisciplineForm();
         $data = User::getTeachers();
-        $data = ArrayHelper::map($data, 'id', 'full_name');
 
         if ($model->load(\Yii::$app->request->post()) && $model->validate()) {
             $discipline = Discipline::create($model, true);

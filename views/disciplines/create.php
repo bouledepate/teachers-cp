@@ -29,7 +29,6 @@ $this->title = 'Создать дисциплину'; ?>
                 'class' => 'form-control', 'placeholder' => 'Название дисциплины'
             ]) ?>
             <?= $form->field($model, 'teacherId')->widget(Select2::className(), [
-                'bsVersion' => 4,
                 'data' => $data,
                 'options' => [
                     'placeholder' => 'Выберите пользователя',
