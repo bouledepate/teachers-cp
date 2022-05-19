@@ -4,6 +4,7 @@
 namespace app\commands;
 
 
+use app\models\Profile;
 use Yii;
 use yii\console\Controller;
 use app\models\User;
@@ -40,23 +41,15 @@ class RbacController extends Controller
         $viewTeacherCategories = $auth->createPermission("viewTeacherCategories");
         $viewTeacherCategories->description = "Просмотр категорий преподавателей";
 
-        $viewStudentCategories = $auth->createPermission("viewStudentCategories");
-        $viewStudentCategories->description = "Просмотр категорий студентов";
-
         // Добавление прав в БД.
         $auth->add($viewAdminCategories);
         $auth->add($addUser);
         $auth->add($editUser);
         $auth->add($viewUser);
         $auth->add($viewTeacherCategories);
-        $auth->add($viewStudentCategories);
 
         // Иерархия "студент -> преподаватель -> админ".
-        $auth->addChild($student, $viewStudentCategories);
-        $auth->addChild($student, $viewUser);
-        $auth->addChild($teacher, $student);
         $auth->addChild($teacher, $viewTeacherCategories);
-        $auth->addChild($admin, $teacher);
         $auth->addChild($admin, $addUser);
         $auth->addChild($admin, $editUser);
         $auth->addChild($admin, $viewAdminCategories);
@@ -69,6 +62,12 @@ class RbacController extends Controller
         $user->generateAuthKey();
         $user->status = User::STATUS_ACTIVE;
         $user->save();
+
+        $profile = new Profile();
+        $profile->first_name = 'Администратор';
+        $profile->last_name = 'Главный';
+        $profile->user_id = $user->id;
+        $profile->save();
 
         // Назначаем роли юзеру. (убрать после тестов)
         $auth->assign($admin, $user->getId());

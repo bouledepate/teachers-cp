@@ -18,7 +18,7 @@ $this->title = 'Создать дисциплину'; ?>
 
 <?= \app\widgets\Alert::widget(); ?>
 
-<div class="container">
+<div class="">
     <div class="row">
         <div class="col-5">
             <?php $form = ActiveForm::begin([

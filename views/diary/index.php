@@ -16,7 +16,7 @@ $this->title = "Успеваемость"; ?>
 
 <?= \app\widgets\Alert::widget(); ?>
 
-<div class="container">
+<div class="">
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'tableOptions' => [

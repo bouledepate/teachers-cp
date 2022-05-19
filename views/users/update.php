@@ -18,7 +18,7 @@ $this->title = 'Редактирование пользователя ' . $user-
     <h1 class="h2"><?= Html::encode($this->title) ?></h1>
 </div>
 <?= \app\widgets\Alert::widget() ?>
-<div class="container">
+<div class="">
     <?php $form = ActiveForm::begin(
         ['id' => 'user-update-form',
             'fieldConfig' => ['template' => "{label}\n{input}\n{hint}\n{error}"]

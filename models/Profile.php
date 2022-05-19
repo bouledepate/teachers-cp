@@ -19,6 +19,7 @@ use yii\db\ActiveRecord;
  * @property-read string $firstName
  * @property-read string $lastName
  * @property string $last_name
+ * @property string $second_name
  */
 
 class Profile extends ActiveRecord
@@ -31,11 +32,11 @@ class Profile extends ActiveRecord
     public function rules()
     {
         return [
-            [['first_name', 'last_name'], 'trim'],
+            [['first_name', 'last_name', 'second_name'], 'trim'],
             ['user_id', 'required'],
             ['user_id', 'unique'],
             [['id', 'user_id'], 'integer'],
-            [['first_name', 'last_name'], 'string', 'max' => 255]
+            [['first_name', 'last_name', 'second_name'], 'string', 'max' => 255]
         ];
     }
 
@@ -45,7 +46,8 @@ class Profile extends ActiveRecord
             'id' => 'ID',
             'user_id' => 'ID пользователя',
             'first_name' => 'Имя',
-            'last_name' => 'Фамилия'
+            'last_name' => 'Фамилия',
+            'second_name' => 'Отчество'
         ];
     }
 
@@ -61,6 +63,7 @@ class Profile extends ActiveRecord
         $profile = Profile::findOne($id);
         $profile->first_name = $params->firstName;
         $profile->last_name = $params->lastName;
+        $profile->second_name = $params->secondName;
         $profile->save();
     }
 
@@ -86,7 +89,7 @@ class Profile extends ActiveRecord
 
     public function getFullName()
     {
-        return $this->first_name . ' ' . $this->last_name;
+        return sprintf('%s %s %s', $this->last_name, $this->first_name, $this->second_name ?? null);
     }
 
     public function getImage()

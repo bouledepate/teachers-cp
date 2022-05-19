@@ -35,7 +35,7 @@ $this->title = 'Группа ' . $group->name; ?>
 
 <?= \app\widgets\Alert::widget(); ?>
 
-<div class="container">
+<div class="">
     <?= DetailView::widget([
         'model' => $group,
         'options' => [

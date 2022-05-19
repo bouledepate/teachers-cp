@@ -21,9 +21,17 @@ $this->title = 'Журнал группы ' . $group->name ?>
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2">Журнал группы <?= $group->name ?></h1>
     <p class="lead"><?= $discipline->name ?></p>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <div class="btn-group mr-2">
+            <a href="<?php $array = $dataProvider->getModels();
+            echo Url::to(['estimates/remove-group-marks', 'id' => $group->id,  'discipline' => $discipline->id]) ?>" class="btn btn-sm btn-outline-secondary"><i
+                        class="bi bi-person-plus-fill"></i> Удалить баллы группы
+            </a>
+        </div>
+    </div>
 </div>
-<div class="container">
-    <?php Pjax::begin(); ?>
+<?= \app\widgets\Alert::widget() ?>
+<div class="">
     <div class="row">
         <div class="col-8">
             <?= GridView::widget([
@@ -54,21 +62,12 @@ $this->title = 'Журнал группы ' . $group->name ?>
                             'value' => function ($data) use ($discipline) {
                                 return \app\helpers\EstimateHelper::setButton($data->id);
                             }
-                        ],
-                        [
-                            'headerOptions' => ['width' => '50'],
-                            'label' => 'Итог',
-                            'format' => 'raw',
-                            'value' => function ($data) use ($discipline) {
-                                return \app\helpers\EstimateHelper::totalEstimateDisplay($data, $discipline);
-                            }
                         ]
                     ]
             ]) ?>
         </div>
         <div class="col-4">
             <div class="card card-body">
-                <?= \app\widgets\Alert::widget() ?>
                 <?php $form = ActiveForm::begin([
                     'layout' => 'horizontal',
                     'action' => Url::to(['estimates/add-estimate']),
@@ -84,8 +83,7 @@ $this->title = 'Журнал группы ' . $group->name ?>
                     'pluginOptions' => ['allowClear' => true]
                 ])->hint('Выберите студента, которому нужно выставить оценку.') ?>
                 <?= $form->field($model, 'value')
-                    ->textInput(['type' => 'number', 'min' => '0', 'max' => '100', 'placeholder' => 'Кол-во баллов'])
-                    ->hint('Количество баллов не должно превышать 100, как в данном случае, так и в общем за всё время.') ?>
+                    ->textInput(['type' => 'number', 'min' => '0', 'max' => '100', 'placeholder' => 'Кол-во баллов']) ?>
                 <?= $form->field($model, 'createdAt')->textInput(['type' => 'date']) ?>
                 <?= $form->field($model, 'authorId')->hiddenInput(['value' => \Yii::$app->user->getId()]) ?>
                 <?= $form->field($model, 'disciplineId')->hiddenInput(['value' => $discipline->id]) ?>
@@ -94,7 +92,6 @@ $this->title = 'Журнал группы ' . $group->name ?>
             </div>
         </div>
     </div>
-    <?php Pjax::end(); ?>
 </div>
 
 

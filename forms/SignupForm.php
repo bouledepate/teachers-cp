@@ -16,9 +16,9 @@ class SignupForm extends Model
     public $email;
 
     public $items = [
-        1 => 'Администратор',
-        2 => 'Преподаватель',
-        3 => 'Студент'
+        'admin' => 'Администратор',
+        'teacher' => 'Преподаватель',
+        'student' => 'Студент'
     ];
     public $params = [
         'prompt' => 'Выберите роль...',

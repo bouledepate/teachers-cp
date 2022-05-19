@@ -21,7 +21,7 @@ $this->title = "Пользователи";
     </div>
 </div>
 <?= \app\widgets\Alert::widget() ?>
-<div class="container">
+<div class="">
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,

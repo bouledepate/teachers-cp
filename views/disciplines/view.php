@@ -27,7 +27,7 @@ $this->title = $discipline->name; ?>
 
 <?= \app\widgets\Alert::widget(); ?>
 
-<div class="container">
+<div class="">
     <?= DetailView::widget([
         'model' => $discipline,
         'options' => [

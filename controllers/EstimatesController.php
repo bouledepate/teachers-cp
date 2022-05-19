@@ -81,9 +81,53 @@ class EstimatesController extends Controller
         $model = new AddEstimateForm();
         if ($model->load(\Yii::$app->request->post()) && $model->validate()) {
             Estimate::add($model);
-            \Yii::$app->session->setFlash('success', 'Оценка выставлена.');
+            \Yii::$app->session->setFlash('success', 'Баллы выставлены.');
         }
         return $this->redirect(\Yii::$app->request->referrer);
     }
 
+    public function actionRemoveMark($id)
+    {
+        $model = Estimate::findOne(['id' => $id]);
+
+        if ($model) {
+            if ($model->delete()) {
+                \Yii::$app->session->setFlash('success', 'Баллы удалены');
+            } else {
+                \Yii::$app->session->setFlash('error', 'Ошибка при удалении баллов');
+            }
+        }
+
+        return $this->redirect(\Yii::$app->request->referrer);
+    }
+
+    public function actionRemoveMarks($id)
+    {
+        if (Estimate::removeAllMarks($id)) {
+            \Yii::$app->session->setFlash('success', 'Все баллы удалены');
+        } else {
+            \Yii::$app->session->setFlash('error', 'Ошибка при удалении баллов');
+        }
+
+        return $this->redirect(\Yii::$app->request->referrer);
+    }
+
+    public function actionRemoveMarksByMonth($id, $month)
+    {
+        if (Estimate::removeByMonth($id, $month)) {
+            \Yii::$app->session->setFlash('success', 'Все баллы удалены');
+        } else {
+            \Yii::$app->session->setFlash('error', 'Ошибка при удалении баллов');
+        }
+
+        return $this->redirect(\Yii::$app->request->referrer);
+    }
+
+    public function actionRemoveGroupMarks($id, $discipline)
+    {
+        Estimate::removeGroupMarks($id, $discipline);
+        \Yii::$app->session->setFlash('success', 'Баллы всей группы были удалены');
+
+        return $this->redirect(\Yii::$app->request->referrer);
+    }
 }

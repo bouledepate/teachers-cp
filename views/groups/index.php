@@ -20,7 +20,7 @@ $this->title = "Группы"; ?>
     </div>
 </div>
 <?= Alert::widget(); ?>
-<div class="container">
+<div class="">
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'tableOptions' => [

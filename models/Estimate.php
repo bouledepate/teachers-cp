@@ -40,6 +40,21 @@ class Estimate extends ActiveRecord
         return $this->hasOne(User::class, ['id' => 'author_id']);
     }
 
+    public static function getByMonth(int $id, int $month)
+    {
+        return self::findBySql("SELECT * FROM estimate WHERE MONTH(created_at) = $month AND user_discipline_id = $id")->all();
+    }
+
+    public static function removeByMonth(int $id, int $month)
+    {
+        return self::deleteAll("MONTH(created_at) = $month AND user_discipline_id = $id");
+    }
+
+    public static function removeAllMarks($id)
+    {
+        return Estimate::deleteAll(['user_discipline_id' => $id]);
+    }
+
     public static function add($model, $returned = false)
     {
         $userDiscipline = User::getUserDisciplineRelationId($model->userId, $model->disciplineId);
@@ -53,6 +68,16 @@ class Estimate extends ActiveRecord
 
         if ($returned) {
             return $estimate;
+        }
+    }
+
+    public static function removeGroupMarks($groupId, $disciplineId)
+    {
+        $users = User::getStudents($groupId, true)->all();
+
+        foreach ($users as $user) {
+            $userDiscipline = User::getUserDisciplineRelationId($user->id, $disciplineId);
+            static::removeAllMarks($userDiscipline->id);
         }
     }
 }

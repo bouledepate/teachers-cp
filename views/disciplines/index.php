@@ -23,7 +23,7 @@ $this->title = "Дисциплины"; ?>
 
 <?= \app\widgets\Alert::widget(); ?>
 
-<div class="container">
+<div class="">
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'tableOptions' => [
@@ -45,7 +45,7 @@ $this->title = "Дисциплины"; ?>
                     $items = [];
                     foreach ($data->users as $user) {
                         if($user->role === 'teacher'){
-                            $items[] = Html::a($user->username, ['users/view', 'id'=>$user->id]);
+                            $items[] = Html::a($user->profile->fullName, ['users/view', 'id'=>$user->id]);
                         }
                     }
                     return $items ? implode(', ', $items) : null;

@@ -18,7 +18,7 @@ $this->title = 'Изменение дисциплины ' . $discipline->name; ?
 
 <?= \app\widgets\Alert::widget(); ?>
 
-<div class="container">
+<div class="">
     <div class="row">
         <div class="col-6">
             <?php $form = ActiveForm::begin([

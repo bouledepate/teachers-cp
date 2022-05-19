@@ -27,7 +27,7 @@ $this->title = $user->username; ?>
     </div>
 </div>
 <?= \app\widgets\Alert::widget() ?>
-<div class="container">
+
     <?= DetailView::widget([
         'model' => $user,
         'attributes' => [
@@ -108,6 +108,10 @@ $this->title = $user->username; ?>
                 'attribute' => 'last_name'
             ],
             [
+                'label' => 'Отчество',
+                'attribute' => 'second_name'
+            ],
+            [
                 'label' => 'Группа',
                 'attribute' => 'user.group.name'
             ],
@@ -121,4 +125,3 @@ $this->title = $user->username; ?>
         ]
     ])
     ?>
-</div>

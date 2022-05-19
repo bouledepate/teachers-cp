@@ -4,11 +4,13 @@
 namespace app\helpers;
 
 
+use app\enums\MonthEnum;
 use app\models\Estimate;
 use app\models\User;
 use yii\data\ActiveDataProvider;
 use yii\grid\GridView;
 use yii\helpers\Html;
+use yii\helpers\Url;
 
 class EstimateHelper
 {
@@ -23,7 +25,7 @@ class EstimateHelper
         ]);
     }
 
-    public static function setCollapse($disciplineId, $userId, $asList=false, $reverse=false)
+    public static function setCollapse($disciplineId, $userId, $asList = false, $reverse = false)
     {
         $beginWrapper = Html::beginTag('div', [
             'class' => 'collapse',
@@ -44,8 +46,8 @@ class EstimateHelper
             return Html::tag('span', 'Баллы ещё не выставлены', ['class' => 'text-muted']);
         }
 
-        if($asList){
-            return Html::ul($estimates->all(), ['item' => function($item, $index){
+        if ($asList) {
+            return Html::ul($estimates->all(), ['item' => function ($item, $index) {
                 return Html::tag(
                     'li',
                     self::declOfNumber($item->value, array('балл', 'балла', 'баллов')) . ' | ' . $item->created_at
@@ -53,64 +55,81 @@ class EstimateHelper
             }]);
         }
 
-        return GridView::widget([
-            'dataProvider' => new ActiveDataProvider([
-                'query' => $estimates,
-            ]),
-            'tableOptions' => [
-                'class' => 'table table-striped table-bordered table-sm'
-            ],
-            'columns' => [
-                [
-                    'label' => 'Баллы',
-                    'attribute' => 'value'
-                ],
-                [
-                    'label' => 'Дата',
-                    'attribute' => 'created_at'
-                ],
-                [
-                    'label' => 'Выставил',
-                    'format' => 'raw',
-                    'value' => function($data) {
-                        return Html::a($data->author->username, ['profile/index', 'username' => $data->author->username]);
-                    }
-                ]
-            ]
-        ]);
-    }
+        $contentData = static::groupByMonth((new ActiveDataProvider(['query' => $estimates]))->getModels());
+        static::calculateAverageValue($contentData);
 
-    public static function totalEstimateDisplay($userId, $disciplineId)
-    {
-        $userDiscipline = User::getUserDisciplineRelationId($userId, $disciplineId);
-        $estimates = Estimate::findAll(['user_discipline_id' => $userDiscipline['id']]);
-        $total = 0;
+        $table = "<table class='table table-sm table-striped'><tr><th>Баллы</th><th>Дата</th><th>Выставил</th><th>Удаление</th></tr>";
+        foreach ($contentData as $month => $marks) {
 
-        foreach ($estimates as $estimate) {
-            $total += $estimate->value;
+            $table .= "<tr><th colspan='3'>$month</th>";
+
+            $removeMarksByMonthLink = Url::to(['estimates/remove-marks-by-month', 'id' => $marks[0]->user_discipline_id, 'month' => \Yii::$app->formatter->asDatetime($marks[0]->created_at, 'M')]);
+            $table .= "<th><a href='$removeMarksByMonthLink' title='Удалить баллы за $month'><i class='bi bi-x-circle'> Удалить за $month</i></a></th></tr>";
+
+            foreach ($marks as $mark) {
+                if ($mark instanceof Estimate) {
+                    $removeMarkLink = Url::to(['estimates/remove-mark', 'id' => $mark->id]);
+                    $table .= "<tr><td>{$mark->value}</td><td>{$mark->created_at}</td>
+                                <td>{$mark->author->profile->getFullname()}</td>
+                                <td><a href='$removeMarkLink' title='Удалить баллы'><i class='bi bi-x-circle'></i> Удалить</a></td></tr>";
+                } else {
+                    $table .= "<tr><th class='table-success' colspan='4'>РО: $mark</th></tr>";
+                }
+            }
         }
 
-        return Html::tag(
-            'span',
-            self::declOfNumber($total, array('балл', 'балла', 'баллов')),
-            ['class' => self::styleByValue($total)]
-        );
+        $total = 0;
+        $count = 0;
+
+        foreach ($contentData as $month) {
+            $total += $month['average'];
+            $count++;
+        }
+
+        $totalAverage = round($total / $count, 2);
+        $table .= "<th class='table-danger' colspan='3'>РД: $totalAverage</th>";
+
+        $removeMarksLink = Url::to(['estimates/remove-marks', 'id' => array_shift($contentData)[0]->user_discipline_id]);
+        $table .= "<th><a href='$removeMarksLink' title='Удалить все баллы'><i class='bi bi-x-circle'> Удалить все</i></a></th></tr></table>";
+
+        return $table;
+    }
+
+    public static function groupByMonth($models): array
+    {
+        $result = [];
+
+        foreach ($models as $model) {
+            $month = MonthEnum::getMonth(\Yii::$app->formatter->asDatetime($model->created_at, 'M'));
+
+            if (!isset($result[$month])) {
+                $result[$month] = [];
+            }
+
+            $result[$month][] = $model;
+        }
+
+        return $result;
+    }
+
+    public static function calculateAverageValue(array &$data)
+    {
+        foreach ($data as $month => $marks) {
+            $total = 0;
+            $count = 0;
+
+            foreach ($marks as $markInfo) {
+                $total += $markInfo->value;
+                $count++;
+            }
+
+            $data[$month]['average'] = round($total / $count, 2);
+        }
     }
 
     private static function declOfNumber($num, $titles)
     {
         $cases = array(2, 0, 1, 1, 1, 2);
         return $num . " " . $titles[($num % 100 > 4 && $num % 100 < 20) ? 2 : $cases[min($num % 10, 5)]];
-    }
-
-    private static function styleByValue($value)
-    {
-        if ($value >= 75) {
-            return 'badge badge-success';
-        } elseif ($value >= 50 && $value < 75) {
-            return 'badge badge-warning';
-        } else {
-            return 'badge badge-danger';
-        }
     }
 }

@@ -115,12 +115,6 @@ AppAsset::register($this);
                                     Дисциплины
                                 </a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="<?= Url::to(['schedule/index']) ?>">
-                                    <i class="far fa-calendar-alt"></i>
-                                    Расписание групп
-                                </a>
-                            </li>
                         </ul>
                         <hr class="my-2">
                     <?php endif; ?>
@@ -136,32 +130,6 @@ AppAsset::register($this);
                                 <a class="nav-link" href="<?= Url::to(['estimates/index']) ?>">
                                     <i class="fas fa-book-open"></i>
                                     Журнал оценивания
-                                </a>
-                            </li>
-                        </ul>
-                        <hr class="my-2">
-                    <?php endif ?>
-                    <?php if (Yii::$app->user->can("viewStudentCategories")): ?>
-                        <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-                            <span>Студенту</span>
-                            <a class="d-flex align-items-center text-muted" href="#" aria-label="Add a new report">
-                                <span data-feather="plus-circle"></span>
-                            </a>
-                        </h6>
-                        <ul class="nav flex-column mt-2">
-                            <li class="nav-item">
-                                <a class="nav-link" href="<?= Url::to(['diary/index']) ?>">
-                                    <i class="fas fa-book"></i>
-                                    Успеваемость
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link"
-                                   href="<?= Url::to(['schedule/view', 'id' => \Yii::$app->user->identity->group_id ?
-                                       \Yii::$app->user->identity->group_id : 0,
-                                       'week' => \app\models\Schedule::WEEK_NUM]) ?>">
-                                    <i class="far fa-calendar-alt"></i>
-                                    Расписание
                                 </a>
                             </li>
                         </ul>

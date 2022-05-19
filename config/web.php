@@ -5,7 +5,7 @@ $db = require __DIR__ . '/db.php';
 
 $config = [
     'id' => 'basic',
-    'language' => 'ru',
+    'language' => 'ru-RU',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'aliases' => [
@@ -58,7 +58,8 @@ $config = [
                 'admin/<controller:(disciplines)>/<action:(add-teacher|remove-teacher)>' => '<controller>/<action>',
                 'teacher/<controller:(estimates)>' => '<controller>/index',
                 'teacher/<controller:(estimates)>/<action:(view)>/<id:\d+>' => '<controller>/<action>',
-                'student/<controller:(diary)>' => '<controller>/index'
+                '<controller:(estimates)/<action:(remove-mark|remove-marks|remove-marks-by-month)>/<id:\d+>' => '<controller>/<action>',
+                '<controller:(estimates)/<action:(remove-group-marks)/<id:\d+>/<discipline:\d+>' => '<controller>/<action>',
             ],
         ],
         'authManager' => [

@@ -12,7 +12,7 @@ $this->title = 'Журнал оценивания'; ?>
 
 <?= \app\widgets\Alert::widget(); ?>
 
-<div class="container">
+<div class="">
     <?= ListView::widget([
         'dataProvider' => $dataProvider,
         'itemView' => '_discipline',
