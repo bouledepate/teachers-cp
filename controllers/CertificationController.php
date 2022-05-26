@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\helpers\PHPWordHelper;
 use app\models\Certification;
 use app\models\Discipline;
 use app\models\Group;
@@ -12,6 +13,14 @@ use yii\web\Controller;
 
 class CertificationController extends Controller
 {
+    protected PHPWordHelper $wordHelper;
+
+    public function __construct($id, $module, $config = [])
+    {
+        parent::__construct($id, $module, $config);
+        $this->wordHelper = new PHPWordHelper();
+    }
+
     public function behaviors(): array
     {
         return [
@@ -57,13 +66,18 @@ class CertificationController extends Controller
         return $this->render('check-certification', array_merge(['dataProvider' => $dataProvider], $additionalData));
     }
 
-    public function actionFillCertification(int $group, int $discipline): string
+    public function actionFillCertification(int $group, int $discipline)
     {
         $model = new Certification();
 
         if (\Yii::$app->request->isPost) {
             if ($model->load(\Yii::$app->request->post()) && $model->save()) {
                 UserCertification::saveMany(\Yii::$app->request->post('UserCertification'), $model->id);
+                \Yii::$app->session->setFlash('success', 'Аттестация успешно сохранена.');
+                return $this->redirect(['check-certification', 'group' => $group, 'discipline' => $discipline]);
+            } else {
+                \Yii::$app->session->setFlash('error', 'Произошла ошибка при сохранении данных.');
+                return $this->redirect(\Yii::$app->request->referrer);
             }
         }
 
@@ -76,6 +90,8 @@ class CertificationController extends Controller
     {
         $certification = Certification::findOne(['id' => $id]);
         $data = $certification->group->getStudentsCertification($certification);
+
+        $this->wordHelper->generateNewReport($data, $certification);
 
         return $this->redirect(['certification/index']);
     }

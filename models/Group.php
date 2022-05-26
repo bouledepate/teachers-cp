@@ -162,6 +162,14 @@ class Group extends ActiveRecord
                 'examGrade' => $gradesHelper->getGradeByMark($data->mark),
             ]);
 
+            $totalMark = $this->calculateTotalMark($userData['examMark'], $userData['periodMark']);
+
+            $userData = array_merge($userData, [
+                'totalMark' => $totalMark,
+                'totalGrade' => $gradesHelper->getGradeByMark($totalMark)
+            ]);
+
+            $result['students'][] = $userData;
         }
 
         return $result;
@@ -181,13 +189,16 @@ class Group extends ActiveRecord
                 $monthTotal += $mark->value;
             }
 
-            $total += $monthTotal / count($marks);
+            if (count($marks) > 0) {
+                $total += $monthTotal / count($marks);
+            }
         }
 
-        return $total / count($months);
+        return intval($total / count($months));
     }
 
-    protected function calculateTotalMark(float $examMark, float $periodMark) {
-
+    protected function calculateTotalMark(int $examMark, int $periodMark): int
+    {
+        return intval((0.6 * $periodMark) + (0.4 * $examMark));
     }
 }

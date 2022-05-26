@@ -82,7 +82,7 @@ $this->title = "Аттестация группы " . $group->name; ?>
                 'template' => '{report}',
                 'buttons' => [
                     'report' => function ($url, $model, $key) {
-                        return Html::a('<i class="fas fa-ban"></i>', $url);
+                        return Html::a('<i class="bi bi-save"></i>', $url, ['class' => 'btn btn-sm btn-info', 'title' => 'Выгрузить в PDF']);
                     }
                 ],
             ],
