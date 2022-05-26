@@ -64,8 +64,9 @@ class RbacController extends Controller
         $user->save();
 
         $profile = new Profile();
-        $profile->first_name = 'Администратор';
-        $profile->last_name = 'Главный';
+        $profile->first_name = 'Имя';
+        $profile->last_name = 'Фамилия';
+        $profile->second_name = 'Отчество';
         $profile->user_id = $user->id;
         $profile->save();
 
