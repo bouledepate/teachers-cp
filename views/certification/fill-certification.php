@@ -20,45 +20,15 @@ $this->title = 'Аттестация группы ' . $group->name;
     <?php $form = \yii\widgets\ActiveForm::begin() ?>
     <?= $form->field($model, 'group_id')->hiddenInput(['value' => $group->id])->label(false) ?>
     <?= $form->field($model, 'discipline_id')->hiddenInput(['value' => $discipline->id])->label(false) ?>
-    <?= $form->field($model, 'type')->hiddenInput()->label(false) ?>
-    <?= $form->field($model, 'subtype')->hiddenInput()->label(false) ?>
     <?= $form->field($model, 'period')->hiddenInput()->label(false) ?>
-    <?= $form->field($model, 'date')->hiddenInput()->label(false) ?>
-    <?php \yii\widgets\ActiveForm::end() ?>
     <div class="row pb-4 mb-3 border-bottom">
         <div class="col col-3">
             <h4>Тип аттестации</h4>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="certification-type-select"
-                       value="<?= Certification::TYPE_EXAM ?>" id="type-exam">
-                <label class="form-check-label" for="type-exam">
-                    Экзамен
-                </label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="certification-type-select"
-                       value="<?= Certification::TYPE_MIDTERM ?>" id="type-midterm">
-                <label class="form-check-label" for="type-midterm">
-                    Зачёт
-                </label>
-            </div>
+            <?= $form->field($model, 'type')->radioList(Certification::getCertificationTypes(), ['separator' => '<br>'])->label(false) ?>
         </div>
         <div class="col col-3" id="exam-type-selector" style="display: none">
             <h4>Формат экзамена</h4>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="exam-type-selector"
-                       value="<?= Certification::TYPE_ORAL_EXAM ?>" id="type-oral">
-                <label class="form-check-label" for="type-oral">
-                    Устный
-                </label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="exam-type-selector"
-                       value="<?= Certification::TYPE_WRITTEN_EXAM ?>" id="type-written">
-                <label class="form-check-label" for="type-written">
-                    Письменный
-                </label>
-            </div>
+            <?= $form->field($model, 'subtype')->radioList(Certification::getExamTypes(), ['separator' => '<br>'])->label(false) ?>
         </div>
     </div>
     <div class="row mt-2" id="additional-data">
@@ -73,7 +43,7 @@ $this->title = 'Аттестация группы ' . $group->name;
                 <div class="col col-6">
                     <div class="form-group">
                         <p class="font-weight-bold">Дата проведения экзамена:</p>
-                        <input type="datetime-local" id="date" class="form-control">
+                        <?= $form->field($model, 'date')->textInput(['type' => 'datetime-local'])->label(false) ?>
                     </div>
                 </div>
             </div>
@@ -90,21 +60,40 @@ $this->title = 'Аттестация группы ' . $group->name;
                     <?php
                     foreach ($group->users as $student) {
                         echo "<tr>
-<td>{$student->profile->getFullname()} <input type=\"hidden\" name=\"user[]\" value=\"{$student->id}\"></td>
-<td><input type=\"number\" name=\"mark[]\" min=\"0\" max=\"100\" class=\"form-control-sm\" required></td>
-<td><input type=\"number\" name=\"ticket[]\" min=\"0\" max=\"100\" class=\"form-control-sm\" required></td>
+<td>{$student->profile->getFullname()} <input type=\"hidden\" name=\"UserCertification[users][]\" value=\"{$student->id}\"></td>
+<td><input type=\"number\" name=\"UserCertification[marks][]\" min=\"0\" max=\"100\" class=\"form-control-sm\"></td>
+<td><input type=\"number\" name=\"UserCertification[tickets][]\" min=\"0\" max=\"100\" class=\"form-control-sm\" disabled></td>
 </tr>";
                     } ?>
+                    <input type="hidden" name="UserCertification[count]" value="<?= count($group->users) ?>">
                 </table>
             </div>
         </div>
     </div>
+    <input type="submit" value="Сохранить" class="btn btn-success">
+    <?php \yii\widgets\ActiveForm::end() ?>
 </div>
 
 <script type="application/javascript">
-    let certificationTypeSelectors = document.getElementsByName('certification-type-select')
-    let examTypeSelectors = document.getElementsByName('exam-type-selector')
+    let certificationTypeSelectors = document.getElementsByName('Certification[type]')
     let monthCheckboxes = document.getElementsByName('period_list[]')
+    let ticketInputs = document.getElementsByName('UserCertification[tickets][]')
+
+    function changeTicketInputsState(type) {
+        if (type === "0") {
+            for (let id = 0; id < ticketInputs.length; id++) {
+                ticketInputs[id].required = true
+                ticketInputs[id].disabled = false
+                ticketInputs[id].value = ''
+            }
+        } else {
+            for (let id = 0; id < ticketInputs.length; id++) {
+                ticketInputs[id].required = false
+                ticketInputs[id].disabled = true
+                ticketInputs[id].value = ''
+            }
+        }
+    }
 
     function resetForm() {
         let formElements = document.getElementById('w0').elements
@@ -114,15 +103,8 @@ $this->title = 'Аттестация группы ' . $group->name;
         }
     }
 
-    document.getElementById('date').addEventListener('change', function (event) {
-        document.getElementById('certification-date').value = event.target.value
-    })
-
     for (let id = 0; id < certificationTypeSelectors.length; id++) {
-        certificationTypeSelectors[id].addEventListener('change', function (event) {
-            resetForm()
-            document.getElementById('certification-type').value = event.target.value;
-
+        certificationTypeSelectors[id].addEventListener('click', function (event) {
             let examTypeSelector = document.getElementById('exam-type-selector')
 
             if (event.target.value === "0") {
@@ -130,12 +112,8 @@ $this->title = 'Аттестация группы ' . $group->name;
             } else {
                 examTypeSelector.style.display = 'none'
             }
-        })
-    }
 
-    for (let id = 0; id < examTypeSelectors.length; id++) {
-        examTypeSelectors[id].addEventListener('change', function (event) {
-            document.getElementById('certification-subtype').value = event.target.value;
+            changeTicketInputsState(event.target.value)
         })
     }
 

@@ -33,7 +33,7 @@ class CertificationHelper
         return null;
     }
 
-    public function getMonthsByKeys(int $keys): array
+    public static function getMonthsByKeys(int $keys): array
     {
         $result = [];
 
@@ -59,7 +59,7 @@ class CertificationHelper
         return $result;
     }
 
-    public static function isSelected(int $value, int $total): bool
+    public static function isSelected(int $total, int $value): bool
     {
         return ($total & $value) == $value;
     }

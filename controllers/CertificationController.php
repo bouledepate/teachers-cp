@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\models\Certification;
 use app\models\Discipline;
 use app\models\Group;
+use app\models\UserCertification;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -59,6 +60,12 @@ class CertificationController extends Controller
     public function actionFillCertification(int $group, int $discipline): string
     {
         $model = new Certification();
+
+        if (\Yii::$app->request->isPost) {
+            if ($model->load(\Yii::$app->request->post()) && $model->save()) {
+                UserCertification::saveMany(\Yii::$app->request->post('UserCertification'), $model->id);
+            }
+        }
 
         $additionalData = $this->getCertificationAdditionalData($group, $discipline);
 

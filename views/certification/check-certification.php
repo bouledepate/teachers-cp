@@ -22,7 +22,7 @@ $this->title = "Аттестация группы " . $group->name; ?>
 
 <div class="container-fluid">
 
-    <div class="btn-toolbar mb-2 mb-md-0">
+    <div class="btn-toolbar mb-3 mb-md-0">
         <div class="btn-group mr-2">
             <a href="<?= Url::to(['certification/fill-certification', 'group' => $group->id, 'discipline' => $discipline->id]) ?>"
                class="btn btn-sm btn-outline-success"><i class="bi bi-person-plus-fill"></i>
@@ -52,21 +52,28 @@ $this->title = "Аттестация группы " . $group->name; ?>
             [
                 'label' => 'Форма экзамена',
                 'attribute' => 'subtype',
+                'format' => 'raw',
                 'value' => function ($data) {
-                    if ($data->subtype) {
+                    if (isset($data->subtype)) {
                         return Certification::getExamTypes()[$data->subtype];
                     }
 
-                    return '<i>(Не требуется)</i>>';
+                    return '<i>(Не требуется)</i>';
                 }
             ],
             [
                 'label' => 'Период',
-                'attribute' => 'period'
+                'attribute' => 'period',
+                'value' => function ($data) {
+                    return implode(', ', \app\helpers\CertificationHelper::getMonthsByKeys($data->period));
+                }
             ],
             [
                 'label' => 'Дата проведения',
-                'attribute' => 'date'
+                'attribute' => 'date',
+                'value' => function ($data) {
+                    return Yii::$app->formatter->asDatetime($data->date, 'php:d M yy г. H:i');
+                }
             ]
         ],
     ]); ?>

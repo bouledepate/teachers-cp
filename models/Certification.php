@@ -11,6 +11,7 @@ use yii\db\ActiveQuery;
  * @property int $type
  * @property int $subtype
  * @property int $period
+ * @property string $date
  * @property-read Group $group
  * @property-read Discipline $discipline
  * @property-read array $results
@@ -30,10 +31,21 @@ class Certification extends \yii\db\ActiveRecord
             [['group_id', 'discipline_id', 'type', 'subtype', 'period'], 'integer'],
             ['group_id', 'exist', 'targetAttribute' => 'id', 'targetClass' => Group::class, 'message' => 'Указанной группы не существует'],
             ['discipline_id', 'exist', 'targetAttribute' => 'id', 'targetClass' => Discipline::class, 'message' => 'Указанной дисципилины не существует'],
-            ['date', 'datetime', 'format' => 'php:d.m.Y hh:mm:ss'],
+            ['date', 'datetime', 'format' => 'yyyy-MM-dd HH:mm:ss'],
             ['type', 'certificationTypeValidate'],
             ['subtype', 'examTypeValidate']
         ];
+    }
+
+    public function beforeValidate(): bool
+    {
+        if (!parent::beforeValidate()) {
+            return false;
+        }
+
+        $this->date = \Yii::$app->formatter->asDatetime($this->date, 'yyyy-MM-dd HH:mm:ss');
+
+        return true;
     }
 
     public static function getCertificationTypes(): array

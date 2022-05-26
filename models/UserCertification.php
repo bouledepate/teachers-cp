@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use Exception;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
@@ -48,6 +49,15 @@ class UserCertification extends ActiveRecord
         return $this->hasOne(User::class, ['id' => 'user_id']);
     }
 
+    public static function saveMany(array $data, int $certificationId)
+    {
+        $data = self::groupSaveData($data, $certificationId);
+
+        self::getDb()->transaction(function ($db) use ($data) {
+            \Yii::$app->db->createCommand()->batchInsert('user_certification', ['certification_id', 'user_id', 'mark', 'ticket'], $data)->execute();
+        });
+    }
+
     public function ticketValidate($attribute, $params): void
     {
         if ($this->certification->type === Certification::TYPE_EXAM) {
@@ -55,5 +65,21 @@ class UserCertification extends ActiveRecord
                 $this->addError($attribute, 'Необходимо указать номер билета');
             }
         }
+    }
+
+    protected static function groupSaveData(array $data, int $certificationId): array
+    {
+        $result = [];
+
+        for ($id = 0; $id < $data['count']; $id++) {
+            $result[] = [
+                $certificationId,
+                $data['users'][$id],
+                $data['marks'][$id],
+                $data['tickets'][$id] ?? null
+            ];
+        }
+
+        return $result;
     }
 }
