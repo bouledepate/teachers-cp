@@ -74,7 +74,18 @@ $this->title = "Аттестация группы " . $group->name; ?>
                 'value' => function ($data) {
                     return Yii::$app->formatter->asDatetime($data->date, 'php:d M yy г. H:i');
                 }
-            ]
+            ],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'header' => 'Отчёт',
+                'headerOptions' => ['width' => '80'],
+                'template' => '{report}',
+                'buttons' => [
+                    'report' => function ($url, $model, $key) {
+                        return Html::a('<i class="fas fa-ban"></i>', $url);
+                    }
+                ],
+            ],
         ],
     ]); ?>
 </div>

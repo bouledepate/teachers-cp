@@ -4,11 +4,15 @@
 namespace app\models;
 
 
+use app\enums\MonthEnum;
+use app\helpers\GradesHelper;
+use app\helpers\CertificationHelper;
 use yii\db\ActiveRecord;
 
 /**
  * @property int $id
  * @property string $name
+ * @property array $users
  * @property-read string $role
  */
 class Group extends ActiveRecord
@@ -128,5 +132,62 @@ class Group extends ActiveRecord
             'group_discipline.group_id' => $this->id,
             'group_discipline.discipline_id' => $dId
         ])->one();
+    }
+
+    public function getStudentsCertification(Certification $certification)
+    {
+        $result = [];
+        $gradesHelper = new GradesHelper();
+
+        $result = array_merge($result, [
+            'group' => $this->name,
+            'discipline' => $certification->discipline->name,
+            'teacher' => \Yii::$app->user->identity->profile->getFullname(),
+            'students' => []
+        ]);
+
+        foreach ($certification->results as $data) {
+            $userData = [
+                'name' => $data->user->profile->getFullname(),
+                'examMark' => $data->mark,
+                'periodMark' => $this->getTotalEstimateResultByPeriod($certification->period, $data),
+            ];
+
+            if ($certification->type === Certification::TYPE_EXAM) {
+                $userData = array_merge($userData, ['ticket' => $data->ticket]);
+            }
+
+            $userData = array_merge($userData, [
+                'periodGrade' => $gradesHelper->getGradeByMark($userData['periodMark']),
+                'examGrade' => $gradesHelper->getGradeByMark($data->mark),
+            ]);
+
+        }
+
+        return $result;
+    }
+
+    protected function getTotalEstimateResultByPeriod(int $period, UserCertification $data)
+    {
+        $total = 0;
+        $months = CertificationHelper::getMonthsByKeys($period);
+
+        foreach ($months as $month) {
+            $monthTotal = 0;
+            $userDisciplineRelation = User::getUserDisciplineRelationId($data->user_id, $data->certification->discipline_id);
+            $marks = Estimate::getByMonth($userDisciplineRelation->id, array_search($month, MonthEnum::getMonths()));
+
+            foreach ($marks as $mark) {
+                $monthTotal += $mark->value;
+            }
+
+            $total += $monthTotal / count($marks);
+        }
+
+        return $total / count($months);
+    }
+
+    protected function calculateTotalMark(float $examMark, float $periodMark) {
+
     }
 }

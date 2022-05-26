@@ -58,6 +58,7 @@ $config = [
                 'admin/<controller:(disciplines)>/<action:(add-teacher|remove-teacher)>' => '<controller>/<action>',
                 'teacher/<controller:(estimates|certification)>' => '<controller>/index',
                 'teacher/<controller:(estimates)>/<action:(view)>/<id:\d+>' => '<controller>/<action>',
+                'teacher/certification/report/<id>' => 'certification/report',
                 'teacher/certification/<group>/<discipline>' => 'certification/check-certification',
                 'teacher/certification/fill/<group>/<discipline>' => 'certification/fill-certification',
                 '<controller:(estimates)/<action:(remove-mark|remove-marks|remove-marks-by-month)>/<id:\d+>' => '<controller>/<action>',

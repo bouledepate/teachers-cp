@@ -1,6 +1,6 @@
 <?php
 
-namespace app\enums;
+namespace app\helpers;
 
 use app\components\Grade;
 use app\components\GradeBuilder;

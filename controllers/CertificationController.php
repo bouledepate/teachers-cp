@@ -72,6 +72,14 @@ class CertificationController extends Controller
         return $this->render('fill-certification', array_merge(['model' => $model], $additionalData));
     }
 
+    public function actionReport(int $id)
+    {
+        $certification = Certification::findOne(['id' => $id]);
+        $data = $certification->group->getStudentsCertification($certification);
+
+        return $this->redirect(['certification/index']);
+    }
+
     protected function getCertificationAdditionalData(int $group, int $discipline): array
     {
         $group = Group::findOne(['id' => $group]);
