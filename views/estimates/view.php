@@ -30,7 +30,6 @@ $this->title = 'Журнал группы ' . $group->name ?>
         </div>
     </div>
 </div>
-<?= \app\widgets\Alert::widget() ?>
 <div class="">
     <div class="row">
         <div class="col-8">
