@@ -40,6 +40,7 @@ $this->title = 'Редактирование пользователя ' . $user-
     <div class="form-row">
         <div class="col"><?= $form->field($profile, 'first_name')->label('Имя')->textInput(['placeholder' => 'Не установлено']) ?></div>
         <div class="col"><?= $form->field($profile, 'last_name')->label('Фамилия')->textInput(['placeholder' => 'Не установлено']) ?></div>
+        <div class="col"><?= $form->field($profile, 'second_name')->label('Отчество')->textInput(['placeholder' => 'Не установлено']) ?></div>
     </div>
     <div class="row">
         <div class="col">

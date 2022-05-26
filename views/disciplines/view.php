@@ -102,7 +102,6 @@ $this->title = $discipline->name; ?>
                 'fieldConfig' => ['template' => "{beginWrapper}\n{input}\n{hint}\n{error}\n{endWrapper}"]
             ]) ?>
             <?= $form->field($model, 'teacherId')->widget(Select2::className(), [
-                'bsVersion' => 4,
                 'data' => $data,
                 'options' => [
                     'placeholder' => 'Выберите пользователя',

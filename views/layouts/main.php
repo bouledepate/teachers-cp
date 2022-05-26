@@ -132,6 +132,12 @@ AppAsset::register($this);
                                     Журнал оценивания
                                 </a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="<?= Url::to(['certification/index']) ?>">
+                                    <i class="fas fa-book-open"></i>
+                                    Аттестация
+                                </a>
+                            </li>
                         </ul>
                         <hr class="my-2">
                     <?php endif ?>
