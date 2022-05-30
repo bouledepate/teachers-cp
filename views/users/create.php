@@ -44,6 +44,24 @@ $this->title = 'Создание пользователя';
                     ]) ?>
                 </div>
             </div>
+            <div class="form-row">
+                <div class="col">
+                    <?= $form->field($model, 'lastName')->textInput([
+                        'placeholder' => 'Фамилия', 'class' => 'form-control'
+                    ]) ?>
+                </div>
+                <div class="col">
+                    <?= $form->field($model, 'firstName')->textInput([
+                        'placeholder' => 'Имя', 'class' => 'form-control'
+                    ]) ?>
+                </div>
+                <div class="col">
+                    <?= $form->field($model, 'secondName')->textInput([
+                        'placeholder' => 'Отчество', 'class' => 'form-control'
+                    ]) ?>
+                </div>
+            </div>
+
             <div class="form-group">
                 <?= $form->field($model, 'role')->dropdownList($model->items, $model->params) ?>
             </div>

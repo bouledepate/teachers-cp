@@ -21,7 +21,7 @@ class PHPWordHelper
         $this->builder = new PhpWord();
 
         $rendererName = Settings::PDF_RENDERER_MPDF;
-        $rendererLibraryPath = __DIR__ . '\..\vendor\mpdf\mpdf';
+        $rendererLibraryPath = __DIR__ . '/../vendor/mpdf/mpdf';
 
         Settings::setPdfRenderer($rendererName, $rendererLibraryPath);
 

@@ -75,7 +75,7 @@ class UsersController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $user = User::create($model);
-            Profile::create($user->id);
+            if ($user) $model->createProfile($user->id);
             \Yii::$app->session->setFlash('success', 'Пользователь создан. Пароль: ' . $model->password);
             return $this->redirect('/users/index');
         }
