@@ -3,7 +3,9 @@
 
 namespace app\controllers;
 
+use app\enums\MonthEnum;
 use app\forms\AddEstimateForm;
+use app\helpers\EstimateHelper;
 use app\models\Discipline;
 use app\models\Estimate;
 use app\models\Group;
@@ -11,6 +13,7 @@ use app\models\User;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Json;
 use yii\web\Controller;
 use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
@@ -58,6 +61,11 @@ class EstimatesController extends Controller
             'query' => User::getStudents($gId, true)
         ]);
         $data = User::getStudents($gId);
+
+        $groupData = EstimateHelper::getMarksTableData($gId, $dId);
+
+        \Yii::$app->session->set('marksData', $groupData['result']);
+        \Yii::$app->session->set('includedMonths', $groupData['includedMonths']);
 
         if (!$group) {
             throw new NotFoundHttpException('Группы с идентификатором ' . $gId . ' не существует.');
@@ -129,5 +137,14 @@ class EstimatesController extends Controller
         \Yii::$app->session->setFlash('success', 'Баллы всей группы были удалены');
 
         return $this->redirect(\Yii::$app->request->referrer);
+    }
+
+    public function actionGetData($group, $discipline, $month = null)
+    {
+         if (\Yii::$app->request->isAjax) {
+             return Json::encode(EstimateHelper::getMarksTableData($group, $discipline, MonthEnum::getMonth($month)));
+         }
+
+         return $this->redirect(\Yii::$app->request->referrer);
     }
 }

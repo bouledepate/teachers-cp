@@ -19,13 +19,11 @@ class PHPWordHelper
     public function __construct()
     {
         $this->builder = new PhpWord();
-
-        $rendererName = Settings::PDF_RENDERER_MPDF;
-        $rendererLibraryPath = __DIR__ . '/../vendor/mpdf/mpdf';
-
-        Settings::setPdfRenderer($rendererName, $rendererLibraryPath);
-
         $this->setFont();
+
+        Settings::setOutputEscapingEnabled(true);
+        Settings::setDefaultFontSize(14);
+        Settings::setDefaultFontName('Times New Roman');
     }
 
     public function generateNewReport(array $data, Certification $certification)
@@ -65,6 +63,14 @@ class PHPWordHelper
         $teacher = new TextRun();
         $teacher->addText($data['teacher'], $this->baseStyle);
         $template->setComplexValue('teacher', $teacher);
+
+        $module = new TextRun();
+        $module->addText($data['module'], $this->baseStyle);
+        $template->setComplexValue('module', $module);
+
+        $speciality = new TextRun();
+        $speciality->addText($data['speciality'], $this->baseStyle);
+        $template->setComplexValue('speciality', $speciality);
 
         return $template;
     }
@@ -144,7 +150,7 @@ class PHPWordHelper
             $name .= '-midterm-' . time();
         }
 
-        return $name . '.pdf';
+        return $name . '.docx';
     }
 
     protected function importTemplate()
@@ -154,10 +160,26 @@ class PHPWordHelper
 
     protected function saveReport(TemplateProcessor $template, Certification $certification)
     {
-        $template->saveAs('temp.docx');
-        $buffer = IOFactory::load('temp.docx');
-        unlink('temp.docx');
+        $filename = $this->setFilename($certification);
 
-        return $buffer->save($this->setFilename($certification), 'PDF', true);
+        $template->saveAs($filename);
+
+        if (ob_get_level()) {
+            ob_end_clean();
+        }
+
+        header('Content-Description: File Transfer');
+        header('Content-Type: application/octet-stream');
+        header('Content-Disposition: attachment; filename=' . basename($filename));
+        header('Content-Transfer-Encoding: binary');
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate');
+        header('Pragma: public');
+        header('Content-Length: ' . filesize($filename));
+        readfile($filename);
+
+        unlink($filename);
+
+        exit;
     }
 }

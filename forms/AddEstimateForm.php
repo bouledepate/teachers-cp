@@ -6,6 +6,7 @@ namespace app\forms;
 
 use app\models\Estimate;
 use app\models\User;
+use yii\db\Query;
 
 class AddEstimateForm extends \yii\base\Model
 {
@@ -18,9 +19,10 @@ class AddEstimateForm extends \yii\base\Model
     public function rules()
     {
         return [
-            'required' => [['userId', 'disciplineId', 'authorId', 'value'], 'required'],
-            'integer' => [['authorId', 'disciplineId', 'userId', 'value'], 'integer'],
-            'date' => ['createdAt', 'date', 'format' => 'php:Y-m-d']
+            [['userId', 'disciplineId', 'authorId', 'value'], 'required'],
+            [['authorId', 'disciplineId', 'userId', 'value'], 'integer'],
+            ['createdAt', 'date', 'format' => 'php:Y-m-d'],
+            ['createdAt', 'dateValidator']
         ];
     }
 
@@ -33,5 +35,22 @@ class AddEstimateForm extends \yii\base\Model
             'disciplineId' => 'Дисцилпина',
             'createdAt' => 'Выставлено'
         ];
+    }
+
+    public function dateValidator(string $attribute, ?array $params)
+    {
+        $userDisciplineId = User::getUserDisciplineRelationId($this->userId, $this->disciplineId);
+
+        $result = (new Query())->select('created_at')
+            ->from('estimate')
+            ->where(['user_discipline_id' => $userDisciplineId->id])
+            ->all();
+
+        array_map(function ($data) use ($attribute) {
+            if ($data['created_at'] === $this->createdAt) {
+                $this->addError($attribute, 'Вы не можете выставить оценку на эту дату.');
+                \Yii::$app->session->setFlash('error', 'Вы не можете выставить оценку на эту дату.');
+            }
+        }, $result);
     }
 }

@@ -72,7 +72,7 @@ $this->title = "Аттестация группы " . $group->name; ?>
                 'label' => 'Дата проведения',
                 'attribute' => 'date',
                 'value' => function ($data) {
-                    return Yii::$app->formatter->asDatetime($data->date, 'php:d M yy г. H:i');
+                    return Yii::$app->formatter->asDatetime($data->date, 'dd.MM.yyyy H:i');
                 }
             ],
             [
