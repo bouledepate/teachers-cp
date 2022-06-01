@@ -27,6 +27,20 @@ $this->title = 'Создание группы'; ?>
                         'placeholder' => 'Название группы', 'class' => 'form-control'
                     ]) ?>
                 </div>
+            </div>
+            <div class="form-row">
+                <div class="col">
+                    <?= $form->field($model, 'module')->textInput([
+                        'placeholder' => 'Модуль группы', 'class' => 'form-control'
+                    ]) ?>
+                </div>
+                <div class="col">
+                    <?= $form->field($model, 'speciality')->textInput([
+                        'placeholder' => 'Специальность группы', 'class' => 'form-control'
+                    ]) ?>
+                </div>
+            </div>
+            <div class="form-row">
                 <div class="col">
                     <?= Html::submitButton("Создать", [
                         'class' => 'btn btn-primary'

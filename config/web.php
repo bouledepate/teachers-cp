@@ -61,8 +61,9 @@ $config = [
                 'teacher/certification/report/<id>' => 'certification/report',
                 'teacher/certification/<group>/<discipline>' => 'certification/check-certification',
                 'teacher/certification/fill/<group>/<discipline>' => 'certification/fill-certification',
-                '<controller:(estimates)/<action:(remove-mark|remove-marks|remove-marks-by-month)>/<id:\d+>' => '<controller>/<action>',
-                '<controller:(estimates)/<action:(remove-group-marks)/<id:\d+>/<discipline:\d+>' => '<controller>/<action>',
+                '<controller:(estimates)>/<action:(remove-mark|remove-marks|remove-marks-by-month)>/<id:\d+>' => '<controller>/<action>',
+                '<controller:(estimates)>/<action:(remove-group-marks)/<id:\d+>/<discipline:\d+>' => '<controller>/<action>',
+                '<controller:(estimates)>/getData' => 'estimates/get-data'
             ],
         ],
         'authManager' => [

@@ -27,6 +27,20 @@ $this->title = 'Изменение группы ' . $group->name; ?>
                         'placeholder' => 'Название группы', 'class' => 'form-control'
                     ]) ?>
                 </div>
+            </div>
+            <div class="form-row">
+                <div class="col">
+                    <?= $form->field($group, 'module')->textInput([
+                        'placeholder' => 'Модуль группы', 'class' => 'form-control'
+                    ]) ?>
+                </div>
+                <div class="col">
+                    <?= $form->field($group, 'speciality')->textInput([
+                        'placeholder' => 'Специальность группы', 'class' => 'form-control'
+                    ]) ?>
+                </div>
+            </div>
+            <div class="form-row">
                 <div class="col">
                     <?= Html::submitButton("Изменить", [
                         'class' => 'btn btn-primary'
