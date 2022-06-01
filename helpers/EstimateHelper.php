@@ -6,6 +6,7 @@ namespace app\helpers;
 
 use app\enums\MonthEnum;
 use app\models\Estimate;
+use app\models\Group;
 use app\models\User;
 use yii\data\ActiveDataProvider;
 use yii\grid\GridView;
@@ -131,5 +132,51 @@ class EstimateHelper
     {
         $cases = array(2, 0, 1, 1, 1, 2);
         return $num . " " . $titles[($num % 100 > 4 && $num % 100 < 20) ? 2 : $cases[min($num % 10, 5)]];
+    }
+
+    public static function getMarksTableData(int $groupId, int $disciplineId, $month = null)
+    {
+        if (!\Yii::$app->session->has('group')) {
+            $group = Group::findOne(['id' => $groupId])->getUsers()->all();
+            \Yii::$app->session->set('group', $group);
+        } else {
+            $group = \Yii::$app->session->get('group');
+        };
+
+        $result = [];
+        $includedMonths = [];
+
+        /**
+         * @var User $student
+         */
+        foreach ($group as $student) {
+            $result[$student->profile->getFullname()] = [];
+
+            $userDiscipline = User::getUserDisciplineRelationId($student->id, $disciplineId);
+            $marks = Estimate::find()->where(['user_discipline_id' => $userDiscipline->id])->orderBy('created_at');
+            $data = static::groupByMonth((new ActiveDataProvider(['query' => $marks]))->getModels());
+
+            foreach ($data as $currentMonth => $monthMarks) {
+
+                if ($month && $currentMonth != $month) {
+                    continue;
+                }
+
+                $includedMonths[] = $currentMonth;
+
+                /**
+                 * @var Estimate $mark
+                 */
+                array_map(function ($mark) use (&$result, $currentMonth, $student) {
+                    $result[$student->profile->getFullname()][$currentMonth][\Yii::$app->formatter->asDate($mark->created_at, 'd')] = $mark->value;
+                }, $monthMarks);
+            }
+        }
+
+
+        return [
+            'includedMonths' => array_unique($includedMonths),
+            'result' => $result
+        ];
     }
 }

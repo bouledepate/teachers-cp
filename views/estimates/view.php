@@ -15,6 +15,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\Pjax;
 
+$groupMarks = Yii::$app->session->get('marksData');
 $this->title = 'Журнал группы ' . $group->name ?>
 
 
@@ -30,7 +31,15 @@ $this->title = 'Журнал группы ' . $group->name ?>
         </div>
     </div>
 </div>
-<div class="">
+<?php if (Yii::$app->session->hasFlash('error')): ?>
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>Ошибка добавления!</strong> <?= Yii::$app->session->getFlash('error') ?>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+<?php endif ?>
+<div class="container-fluid">
     <div class="row">
         <div class="col-8">
             <?= GridView::widget([
@@ -92,5 +101,46 @@ $this->title = 'Журнал группы ' . $group->name ?>
         </div>
     </div>
 </div>
+<div class="container-fluid mt-3">
+    <div class="row">
+        <div class="col">
+            <div id="accordion">
+                <?php foreach (\app\enums\MonthEnum::getMonths() as $key => $month) {
+                    $days = cal_days_in_month(CAL_GREGORIAN, $key, date('Y'));
+                    if (in_array($month, Yii::$app->session->get('includedMonths'))) {?>
+                        <div class="card">
+                            <div class="card-header" id="heading-<?= $key ?>">
+                                <h5 class="mb-0">
+                                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapse-<?= $key ?>" aria-expanded="true"
+                                            aria-controls="collapse-<?= $key ?>">
+                                        <?= 'Оценки за ' . strtolower($month) ?>
+                                    </button>
+                                </h5>
+                            </div>
 
-
+                            <div id="collapse-<?= $key ?>" class="collapse" aria-labelledby="heading-<?= $key ?>" data-parent="#accordion">
+                                <div class="card-body">
+                                    <table class="table table-bordered" id="estimates-table">
+                                        <tr>
+                                            <th>ФИО студента</th>
+                                            <?php for ($day = 0; $day < $days; $day++) { ?>
+                                                <th><?= $day + 1 ?></th>
+                                            <?php } ?>
+                                        </tr>
+                                        <?php foreach ($groupMarks as $student => $marks) { ?>
+                                            <tr>
+                                                <th><?= $student ?></th>
+                                                <?php for ($day = 0; $day < $days; $day++) { ?>
+                                                    <th><?= $marks[$month][$day + 1] ?? '' ?></th>
+                                                <?php } ?>
+                                            </tr>
+                                        <?php } ?>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    <?php }} ?>
+            </div>
+        </div>
+    </div>
+</div>

@@ -12,6 +12,8 @@ use yii\db\ActiveRecord;
 /**
  * @property int $id
  * @property string $name
+ * @property string $module
+ * @property string $speciality
  * @property array $users
  * @property-read string $role
  */
@@ -22,11 +24,11 @@ class Group extends ActiveRecord
     public function rules()
     {
         return [
-            'required' => [['name'], 'required'],
+            'required' => [['name', 'module', 'speciality'], 'required'],
             'integer' => ['id', 'integer'],
-            'length' => ['name', 'string', 'max' => 255],
+            'length' => [['name', 'module', 'speciality'], 'string', 'max' => 255],
             'unique' => ['name', 'unique'],
-            'trim' => ['name', 'trim'],
+            'trim' => [['name', 'module', 'speciality'], 'trim'],
         ];
     }
 
@@ -34,7 +36,9 @@ class Group extends ActiveRecord
     {
         return [
             'id' => 'ID группы',
-            'name' => 'Название группы'
+            'name' => 'Название группы',
+            'module' => 'Модуль',
+            'speciality' => 'Специальность'
         ];
     }
 
@@ -42,6 +46,8 @@ class Group extends ActiveRecord
     {
         $group = new Group();
         $group->name = $params->name;
+        $group->module = $params->module;
+        $group->speciality = $params->speciality;
         $group->save();
     }
 
@@ -49,16 +55,6 @@ class Group extends ActiveRecord
     {
         return $this->hasMany(Discipline::class, ['id' => 'discipline_id'])
             ->viaTable('group_discipline', ['group_id' => 'id']);
-    }
-
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    public function getName()
-    {
-        return $this->name;
     }
 
     public function getUsers()
@@ -143,6 +139,8 @@ class Group extends ActiveRecord
             'group' => $this->name,
             'discipline' => $certification->discipline->name,
             'teacher' => \Yii::$app->user->identity->profile->getFullname(),
+            'module' => $this->module,
+            'speciality' => $this->speciality,
             'students' => []
         ]);
 
