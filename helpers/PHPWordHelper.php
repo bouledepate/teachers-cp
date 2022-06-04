@@ -33,7 +33,7 @@ class PHPWordHelper
         $this->fillBaseInformation($data, $template, $certification);
         $this->fillStudentMarksTable($data, $template, $certification);
 
-        return $this->saveReport($template, $certification);
+        $this->saveReport($template, $certification);
     }
 
     protected function fillBaseInformation(array $data, TemplateProcessor $template, Certification $certification)

@@ -119,22 +119,26 @@ $this->title = 'Журнал группы ' . $group->name ?>
                             </div>
 
                             <div id="collapse-<?= $key ?>" class="collapse" aria-labelledby="heading-<?= $key ?>" data-parent="#accordion">
-                                <div class="card-body">
-                                    <table class="table table-bordered" id="estimates-table">
-                                        <tr>
+                                <div class="card-body table-responsive">
+                                    <table class="table table-sm table-bordered" id="estimates-table">
+                                        <thead>
+                                        <tr class="table-secondary">
                                             <th>ФИО студента</th>
                                             <?php for ($day = 0; $day < $days; $day++) { ?>
                                                 <th><?= $day + 1 ?></th>
                                             <?php } ?>
                                         </tr>
+                                        </thead>
+                                        <tbody>
                                         <?php foreach ($groupMarks as $student => $marks) { ?>
                                             <tr>
                                                 <th><?= $student ?></th>
                                                 <?php for ($day = 0; $day < $days; $day++) { ?>
-                                                    <th><?= $marks[$month][$day + 1] ?? '' ?></th>
+                                                    <th ><?= $marks[$month][$day + 1] ?? '' ?></th>
                                                 <?php } ?>
                                             </tr>
                                         <?php } ?>
+                                        </tbody>
                                     </table>
                                 </div>
                             </div>
