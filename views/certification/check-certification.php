@@ -79,10 +79,13 @@ $this->title = "Аттестация группы " . $group->name; ?>
                 'class' => 'yii\grid\ActionColumn',
                 'header' => 'Отчёт',
                 'headerOptions' => ['width' => '80'],
-                'template' => '{report}',
+                'template' => '{report} {delete}',
                 'buttons' => [
                     'report' => function ($url, $model, $key) {
-                        return Html::a('<i class="bi bi-save"></i>', $url, ['class' => 'btn btn-sm btn-info', 'title' => 'Выгрузить в PDF']);
+                        return Html::a('<i class="bi bi-save"></i>', $url, ['class' => 'btn btn-sm btn-info', 'title' => 'Выгрузить']);
+                    },
+                    'delete' => function ($url, $model, $key) {
+                        return Html::a('<i class="bi bi-file-earmark-x"></i>', $url, ['class' => 'btn btn-sm btn-danger', 'title' => 'Удалить']);
                     }
                 ],
             ],

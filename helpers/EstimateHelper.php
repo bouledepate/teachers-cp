@@ -136,12 +136,7 @@ class EstimateHelper
 
     public static function getMarksTableData(int $groupId, int $disciplineId, $month = null)
     {
-        if (!\Yii::$app->session->has('group')) {
-            $group = Group::findOne(['id' => $groupId])->getUsers()->all();
-            \Yii::$app->session->set('group', $group);
-        } else {
-            $group = \Yii::$app->session->get('group');
-        };
+        $group = Group::findOne(['id' => $groupId])->getUsers()->all();
 
         $result = [];
         $includedMonths = [];

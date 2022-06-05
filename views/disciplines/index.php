@@ -55,7 +55,7 @@ $this->title = "Дисциплины"; ?>
                 'class' => 'yii\grid\ActionColumn',
                 'header' => 'Действия',
                 'headerOptions' => ['width' => '80'],
-                'template' => '<center>{view} {update}</center>',
+                'template' => '<center>{view} {update} {delete}</center>',
             ],
         ]
     ]); ?>

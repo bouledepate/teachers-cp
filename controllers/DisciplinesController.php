@@ -128,4 +128,18 @@ class DisciplinesController extends Controller
         return $this->redirect(\Yii::$app->request->referrer);
     }
 
+    public function actionDelete(int $id)
+    {
+        $discipline = Discipline::findOne(['id' => $id]);
+
+        if (!$discipline)
+            throw new NotFoundHttpException("Дисциплина не найдена");
+
+        if ($discipline->deleteDiscipline())
+            \Yii::$app->session->setFlash('success', 'Дисциплина удалена.');
+        else
+            \Yii::$app->session->setFlash('error', 'Ошибка при удалении дисциплины.');
+
+        return $this->redirect(\Yii::$app->request->referrer);
+    }
 }

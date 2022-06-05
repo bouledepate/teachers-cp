@@ -105,4 +105,14 @@ class Discipline extends ActiveRecord
             ->all();
         return ArrayHelper::map($data, 'id', 'name');
     }
+
+    public function deleteDiscipline()
+    {
+        \Yii::$app->db->transaction(function ($database) {
+            \Yii::$app->db->createCommand("DELETE FROM user_discipline WHERE discipline_id = {$this->id}");
+            \Yii::$app->db->createCommand("DELETE FROM group_discipline WHERE discipline_id = {$this->id}");
+        });
+
+        return $this->delete();
+    }
 }

@@ -89,11 +89,29 @@ class CertificationController extends Controller
     public function actionReport(int $id)
     {
         $certification = Certification::findOne(['id' => $id]);
-        $data = $certification->group->getStudentsCertification($certification);
 
-        $this->wordHelper->generateNewReport($data, $certification);
+        try {
+            $data = $certification->group->getStudentsCertification($certification);
+            $this->wordHelper->generateNewReport($data, $certification);
+        } catch (\Throwable $exception) {
+            \Yii::$app->session->setFlash('error', 'При формировании отчёта произошла ошибка.');
+        }
 
-        return $this->redirect(['certification/index']);
+
+        return $this->redirect(\Yii::$app->request->referrer);
+    }
+
+    public function actionDelete(int $id)
+    {
+        $certification = Certification::findOne(['id' => $id]);
+
+        if ($certification && $certification->delete()) {
+            \Yii::$app->session->setFlash('success', 'Отчёт был удалён из системы.');
+        } else {
+            \Yii::$app->session->setFlash('error', 'Ошибка при удалени отчёта. Обратитесь к администратору.');
+        }
+
+        return $this->redirect(\Yii::$app->request->referrer);
     }
 
     protected function getCertificationAdditionalData(int $group, int $discipline): array

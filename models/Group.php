@@ -199,4 +199,16 @@ class Group extends ActiveRecord
     {
         return intval((0.6 * $periodMark) + (0.4 * $examMark));
     }
+
+    public function deleteGroup()
+    {
+        \Yii::$app->db->transaction(function ($database) {
+            \Yii::$app->db->createCommand("DELETE FROM group_discipline WHERE group_id = {$this->id}");
+            User::updateAll([
+                'group_id' => null
+            ], ['group_id' => $this->id]);
+        });
+
+        return $this->delete();
+    }
 }

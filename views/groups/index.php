@@ -39,7 +39,7 @@ $this->title = "Группы"; ?>
                 'class' => 'yii\grid\ActionColumn',
                 'header' => 'Действия',
                 'headerOptions' => ['width' => '80'],
-                'template' => '{view} {update}',
+                'template' => '{view} {update} {delete}',
             ],
         ],
     ]); ?>

@@ -179,7 +179,5 @@ class PHPWordHelper
         readfile($filename);
 
         unlink($filename);
-
-        exit;
     }
 }

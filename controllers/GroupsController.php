@@ -149,4 +149,19 @@ class GroupsController extends Controller
         \Yii::$app->session->setFlash('success', 'Дисциплина успешно откреплены от группы.');
         return $this->redirect(\Yii::$app->request->referrer);
     }
+
+    public function actionDelete(int $id)
+    {
+        $group = Group::findOne(['id' => $id]);
+
+        if (!$group)
+            throw new NotFoundHttpException("Группа не найдена");
+
+        if ($group->deleteGroup())
+            \Yii::$app->session->setFlash('success', 'Группа удалена.');
+        else
+            \Yii::$app->session->setFlash('error', 'Ошибка при удалении группы.');
+
+        return $this->redirect(\Yii::$app->request->referrer);
+    }
 }
