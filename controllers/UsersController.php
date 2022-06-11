@@ -58,7 +58,7 @@ class UsersController extends Controller
     {
         $user = User::findOne(['id' => $id]);
 
-        if(!$user){
+        if (!$user) {
             throw new NotFoundHttpException('Пользователь не найден');
         }
 
@@ -89,7 +89,7 @@ class UsersController extends Controller
     {
         $user = User::findOne(['id' => $id]);
 
-        if(!$user){
+        if (!$user) {
             throw new NotFoundHttpException('Пользователь не найден');
         }
 
@@ -146,7 +146,7 @@ class UsersController extends Controller
         $model = new ChangePasswordForm();
         $user = User::findOne($id);
 
-        if(!$user){
+        if (!$user) {
             throw new NotFoundHttpException('Пользователь не найден');
         }
 
@@ -164,15 +164,16 @@ class UsersController extends Controller
         ]);
     }
 
-    public function actionSetImage($id){
+    public function actionSetImage($id)
+    {
         $model = new UploadImageForm();
         $profile = Profile::findOne(['id' => $id]);
 
-        if (\Yii::$app->request->isPost){
+        if (\Yii::$app->request->isPost) {
 
             $file = UploadedFile::getInstance($model, 'image');
 
-            if($profile->saveImage($model->uploadImage($file, $profile->avatar))){
+            if ($profile->saveImage($model->uploadImage($file, $profile->avatar))) {
                 return $this->redirect(['users/view', 'id' => $profile->user_id]);
             }
         }
@@ -181,5 +182,20 @@ class UsersController extends Controller
             'model' => $model,
             'profile' => $profile
         ]);
+    }
+
+    public function actionDelete(int $id)
+    {
+        $user = User::findOne($id);
+
+        if (!$user) {
+            throw new NotFoundHttpException('Пользователь не найден');
+        }
+
+        $user->delete()
+            ? Yii::$app->session->setFlash('success', 'Пользователь удалён.')
+            : Yii::$app->session->setFlash('error', 'Ошибка при удалении пользователя');
+
+        return $this->redirect(Yii::$app->request->referrer);
     }
 }

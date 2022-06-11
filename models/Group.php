@@ -91,6 +91,10 @@ class Group extends ActiveRecord
         }
     }
 
+    /**
+     * @param User $id Пользователь (студент)
+     * @return void
+     */
     public static function removeStudent($id)
     {
         $user = User::findOne(['id' => $id]);

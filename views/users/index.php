@@ -32,40 +32,26 @@ $this->title = "Пользователи";
 
         'columns' => [
             [
-                'label' => 'ID',
-                'attribute' => 'id'
+                'label' => 'Фамилия',
+                'attribute' => 'profile.last_name'
             ],
             [
-                'label' => 'Имя аккаунта',
-                'attribute' => 'username',
+                'label' => 'Имя',
+                'attribute' => 'profile.first_name'
+            ],
+            [
+                'label' => 'Отчество',
+                'attribute' => 'profile.second_name',
             ],
             [
                 'label' => 'Электронная почта',
                 'attribute' => 'email'
             ],
             [
-                'label' => 'Статус аккаунта',
-                'attribute' => 'status',
-                'filter' => \app\helpers\UserHelper::statusList(),
-                'value' => function(\app\models\User $model){
-                    return app\helpers\UserHelper::statusLabel($model->status);
-                },
-                'format' => 'raw'
-            ],
-            [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => 'Действия',
                 'headerOptions' => ['width' => '80'],
-                'template' => '{view} {update} {block}{link}',
-                'buttons' => [
-                    'block' => function ($url, $model, $key) {
-                        if($model->status === 1) {
-                            return Html::a('<i class="fas fa-ban"></i>', $url);
-                        } else {
-                            return Html::a('<i class="far fa-check-circle"></i>', $url);
-                        }
-                    }
-                ],
+                'template' => '{view} {update} {delete}'
             ],
         ],
     ]); ?>

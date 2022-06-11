@@ -68,6 +68,7 @@ class GroupsController extends Controller
             throw new NotFoundHttpException('Информация о группе в системе не найдена');
         }
 
+        // Студенты и дисциплины привязанные к группе
         $studentDataProvider = new ActiveDataProvider([
             'query' => $group->getUsers()
         ]);
@@ -75,6 +76,7 @@ class GroupsController extends Controller
             'query' => $group->getDisciplines()
         ]);
 
+        // Непривязанные к группе студенты и дисциплины
         $studentData = User::getStudentsByGroup($id);
         $disciplineData = Discipline::getDisciplinesByGroup($id);
 

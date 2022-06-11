@@ -60,6 +60,7 @@ class EstimatesController extends Controller
         $dataProvider = new ActiveDataProvider([
             'query' => User::getStudents($gId, true)
         ]);
+        // Список студентов для виджета выставления оценок в формате [ID -> Фамилия Имя]
         $data = User::getStudents($gId);
 
         $groupData = EstimateHelper::getMarksTableData($gId, $dId);
