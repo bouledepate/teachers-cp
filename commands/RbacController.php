@@ -73,4 +73,43 @@ class RbacController extends Controller
         // Назначаем роли юзеру. (убрать после тестов)
         $auth->assign($admin, $user->getId());
     }
+
+    public function actionAdmin(string $username, string $password)
+    {
+        $userId = $this->createUser($username, $password);
+
+        if (!empty($userId)) {
+            $this->createProfile($userId);
+            $this->assignUserRole($userId, 'admin');
+        }
+    }
+
+    private function createUser(string $username, string $password)
+    {
+        $model = new User();
+
+        $model->username = $username;
+        $model->email = $username . '@example.com';
+        $model->setPassword($password);
+        $model->generateAuthKey();
+        $model->status = User::STATUS_ACTIVE;
+
+        if ($model->save())
+            return $model->id;
+
+        return null;
+    }
+
+    private function createProfile(int $userId)
+    {
+        $profile = new Profile();
+        $profile->user_id = $userId;
+        $profile->save();
+    }
+
+    private function assignUserRole(int $userId, string $role)
+    {
+        $role = Yii::$app->authManager->getRole($role);
+        Yii::$app->authManager->assign($role, $userId);
+    }
 }
