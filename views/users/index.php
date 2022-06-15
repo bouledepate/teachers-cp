@@ -25,7 +25,7 @@ $this->title = "Пользователи";
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
-        'layout'=>"{summary}\n{items}",
+        'layout' => "{summary}\n{items}",
         'tableOptions' => [
             'class' => 'table table-striped table-bordered table-sm'
         ],
@@ -51,12 +51,22 @@ $this->title = "Пользователи";
                 'class' => 'yii\grid\ActionColumn',
                 'header' => 'Действия',
                 'headerOptions' => ['width' => '80'],
-                'template' => '{view} {update} {delete}'
+                'template' => '{view} {update} {delete}',
+                'buttons' => [
+                    'delete' => function ($url, $model, $key) {
+                        if ($model->id === Yii::$app->user->id) {
+                            return "<a class='text-primary' onclick='return alert(\"Вы не можете удалить самого себя.\")'><i class=\"fas fa-trash-alt\"></i></a>";
+                        } elseif ($model->getRole() === 'admin')
+                            return "<a href='$url' onclick='return confirm(\"Данный пользователь администратор. Удалить?\")'><i class=\"fas fa-trash-alt\"></i></a>";
+                        else
+                            return "<a href='$url'><i class=\"fas fa-trash-alt\"></i></a>";
+                    }
+                ]
             ],
         ],
     ]); ?>
     <?= \yii\bootstrap4\LinkPager::widget([
-        'pagination'=>$dataProvider->pagination,
+        'pagination' => $dataProvider->pagination,
         'maxButtonCount' => 3,
         'nextPageLabel' => '>>',
         'prevPageLabel' => '<<',
