@@ -8,11 +8,15 @@ use yii\data\ActiveDataProvider;
 
 class UserSearch extends User
 {
+    public $firstName;
+    public $secondName;
+    public $lastName;
+
     public function rules()
     {
         return [
             ['id', 'integer'],
-            [['username', 'email', 'status'], 'safe'],
+            [['username', 'email', 'status', 'firstName', 'secondName', 'lastName'], 'safe'],
         ];
     }
 
@@ -23,7 +27,7 @@ class UserSearch extends User
 
     public function search($params)
     {
-        $query = User::find();
+        $query = User::find()->joinWith('profile');
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'pagination' => [
@@ -41,6 +45,9 @@ class UserSearch extends User
         $query->andFilterWhere(['like', 'username', $this->username])
             ->andFilterWhere(['like', 'email', $this->email])
             ->andFilterWhere(['like', 'status', $this->status]);
+        $query->andFilterWhere(['like', 'profile.first_name', $this->firstName])
+            ->andFilterWhere(['like', 'profile.second_name', $this->secondName])
+            ->andFilterWhere(['like', 'profile.last_name', $this->lastName]);
 
         return $dataProvider;
     }

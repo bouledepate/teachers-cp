@@ -33,15 +33,18 @@ $this->title = "Пользователи";
         'columns' => [
             [
                 'label' => 'Фамилия',
-                'attribute' => 'profile.last_name'
+                'attribute' => 'lastName',
+                'value' => 'profile.last_name'
             ],
             [
                 'label' => 'Имя',
-                'attribute' => 'profile.first_name'
+                'attribute' => 'firstName',
+                'value' => 'profile.first_name'
             ],
             [
                 'label' => 'Отчество',
-                'attribute' => 'profile.second_name',
+                'attribute' => 'secondName',
+                'value' => 'profile.second_name'
             ],
             [
                 'label' => 'Электронная почта',
