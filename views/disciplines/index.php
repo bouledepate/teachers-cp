@@ -39,6 +39,10 @@ $this->title = "Дисциплины"; ?>
                 'attribute' => 'name'
             ],
             [
+                'label' => 'Модуль',
+                'attribute' => 'module'
+            ],
+            [
                 'label' => 'Преподаватели',
                 'format' => 'raw',
                 'value' => function ($data) {

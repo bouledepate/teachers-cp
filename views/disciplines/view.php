@@ -44,6 +44,10 @@ $this->title = $discipline->name; ?>
                 'label' => 'Название дисциплины',
                 'attribute' => 'name'
             ],
+            [
+                'label' => 'Модуль',
+                'attribute' => 'module'
+            ]
         ]
     ]) ?>
     <hr class="my-2">

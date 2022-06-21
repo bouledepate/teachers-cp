@@ -12,7 +12,6 @@ use yii\db\ActiveRecord;
 /**
  * @property int $id
  * @property string $name
- * @property string $module
  * @property string $speciality
  * @property array $users
  * @property-read string $role
@@ -24,11 +23,11 @@ class Group extends ActiveRecord
     public function rules()
     {
         return [
-            'required' => [['name', 'module', 'speciality'], 'required'],
+            'required' => [['name', 'speciality'], 'required'],
             'integer' => ['id', 'integer'],
-            'length' => [['name', 'module', 'speciality'], 'string', 'max' => 255],
+            'length' => [['name', 'speciality'], 'string', 'max' => 255],
             'unique' => ['name', 'unique'],
-            'trim' => [['name', 'module', 'speciality'], 'trim'],
+            'trim' => [['name', 'speciality'], 'trim'],
         ];
     }
 
@@ -37,7 +36,6 @@ class Group extends ActiveRecord
         return [
             'id' => 'ID группы',
             'name' => 'Название группы',
-            'module' => 'Модуль',
             'speciality' => 'Специальность'
         ];
     }
@@ -46,7 +44,6 @@ class Group extends ActiveRecord
     {
         $group = new Group();
         $group->name = $params->name;
-        $group->module = $params->module;
         $group->speciality = $params->speciality;
         $group->save();
     }
@@ -142,8 +139,8 @@ class Group extends ActiveRecord
         $result = array_merge($result, [
             'group' => $this->name,
             'discipline' => $certification->discipline->name,
+            'module' => $certification->discipline->module,
             'teacher' => \Yii::$app->user->identity->profile->getFullname(),
-            'module' => $this->module,
             'speciality' => $this->speciality,
             'students' => []
         ]);

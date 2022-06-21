@@ -31,6 +31,9 @@ $this->title = 'Изменение дисциплины ' . $discipline->name; ?
                         'placeholder' => 'Название группы', 'class' => 'form-control'
                     ]) ?>
                 </div>
+                <?= $form->field($discipline, 'module')->textInput([
+                    'class' => 'form-control', 'placeholder' => 'Модуль дисциплины'
+                ]) ?>
                 <div class="col">
                     <?= Html::submitButton("Изменить", [
                         'class' => 'btn btn-primary'

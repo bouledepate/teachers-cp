@@ -28,6 +28,9 @@ $this->title = 'Создать дисциплину'; ?>
             <?= $form->field($model, 'name')->textInput([
                 'class' => 'form-control', 'placeholder' => 'Название дисциплины'
             ]) ?>
+            <?= $form->field($model, 'module')->textInput([
+                'class' => 'form-control', 'placeholder' => 'Модуль дисциплины'
+            ]) ?>
             <?= $form->field($model, 'teacherId')->widget(Select2::className(), [
                 'data' => $data,
                 'options' => [

@@ -10,6 +10,7 @@ class CreateDisciplineForm extends Model
 {
     public $name;
     public $teacherId;
+    public $module;
 
     public static function className()
     {
@@ -19,8 +20,8 @@ class CreateDisciplineForm extends Model
     public function rules()
     {
         return [
-            'required' => ['name', 'required'],
-            'string' => ['name', 'string', 'max' => 255],
+            'required' => [['name', 'module'], 'required'],
+            'string' => [['name', 'module'], 'string', 'max' => 255],
         ];
     }
 }

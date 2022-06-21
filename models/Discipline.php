@@ -21,10 +21,9 @@ class Discipline extends ActiveRecord
     public function rules()
     {
         return [
-            'required' => ['name', 'required'],
-            'trim' => ['name', 'trim'],
-            'length' => ['name', 'string', 'max' => 255],
-            'id' => ['id', 'integer']
+            'required' => [['name', 'module'], 'required'],
+            'trim' => [['name', 'module'], 'trim'],
+            'length' => [['name', 'module'], 'string', 'max' => 255]
         ];
     }
 
@@ -32,7 +31,8 @@ class Discipline extends ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => 'Наименование дисциплины'
+            'name' => 'Наименование дисциплины',
+            'module' => 'Модуль'
         ];
     }
 
@@ -40,6 +40,7 @@ class Discipline extends ActiveRecord
     {
         $discipline = new Discipline();
         $discipline->name = $model->name;
+        $discipline->module = $model->module;
         $discipline->save();
         if ($returned) {
             return $discipline;
