@@ -30,11 +30,6 @@ $this->title = 'Создание группы'; ?>
             </div>
             <div class="form-row">
                 <div class="col">
-                    <?= $form->field($model, 'module')->textInput([
-                        'placeholder' => 'Модуль группы', 'class' => 'form-control'
-                    ]) ?>
-                </div>
-                <div class="col">
                     <?= $form->field($model, 'speciality')->textInput([
                         'placeholder' => 'Специальность группы', 'class' => 'form-control'
                     ]) ?>
